@@ -1,3 +1,7 @@
-﻿  GlobalFunctions.cpp
+﻿  main.cpp
+  Entity.cpp
+c:\users\usuario\desktop\mundburg\mundburg\entity.cpp(18): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\mundburg\mundburg\entity.cpp(46): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
   Mundburg.vcxproj -> C:\Users\usuario\Desktop\Mundburg\Debug\Mundburg.exe
   Mundburg.vcxproj -> C:\Users\usuario\Desktop\Mundburg\Debug\Mundburg.pdb (Partial PDB)
