@@ -2,13 +2,12 @@
 
 
 
-Entity::Entity(const char* name, const char* description, Entity* parent) :
-_name(name), _description(description),  _parent(parent), _type(EntityType::ENTITY) {
+Entity::Entity(const char* name, const char* description, EntityType type, Entity* parent ) :
+_name(name), _description(description),  _parent(parent), _type(type) {
 
     if (parent != nullptr) {
         parent->SetParent(parent);
     }
-
 }
 
 Entity::~Entity() {
