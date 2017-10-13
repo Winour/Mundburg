@@ -2,11 +2,11 @@
 
 
 
-Entity::Entity(const char* name, const char* description, EntityType type, Entity* parent ) :
+Entity::Entity(const char* name, const char* description, Entity* parent, EntityType type) :
 _name(name), _description(description),  _parent(parent), _type(type) {
 
     if (parent != nullptr) {
-        parent->SetParent(parent);
+        parent->SetChild(this);
     }
 }
 
@@ -42,11 +42,13 @@ EntityType Entity::GetType() const {
 }
 
 void Entity::SetChild(Entity* child) {
+
     for (int i = 0; i < _childs.size(); i++) {                  // Looks for child duplication
         if (child == _childs[i]) {
             return;
         }
     }
+
     _childs.push_back(child);
 }
 

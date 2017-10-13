@@ -1,5 +1,10 @@
-﻿  Room.cpp
+﻿  Exit.cpp
+  Generating Code...
+  Compiling...
+  World.cpp
+  Room.cpp
 c:\users\usuario\desktop\mundburg\mundburg\room.cpp(16): warning C4018: '<': signed/unsigned mismatch
 c:\users\usuario\desktop\mundburg\mundburg\room.cpp(25): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
   Mundburg.vcxproj -> C:\Users\usuario\Desktop\Mundburg\Debug\Mundburg.exe
   Mundburg.vcxproj -> C:\Users\usuario\Desktop\Mundburg\Debug\Mundburg.pdb (Partial PDB)

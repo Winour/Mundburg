@@ -13,7 +13,7 @@ int long_descriptions;
 
 int main() {
 
-    long_descriptions = 0;                                      // 0 = Normal Description, 1 = Short Description, 2 = Long Description
+    long_descriptions = 0;                              // 0 = Normal Description, 1 = Short Description, 2 = Long Description
 
 	char key;
 	string player_input;

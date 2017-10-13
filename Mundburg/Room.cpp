@@ -5,7 +5,7 @@
 
 
 Room::Room(const char* name, const char* description) :
-Entity(name, description, EntityType::ROOM, nullptr), _visited(false) {
+Entity(name, description, nullptr, EntityType::ROOM), _visited(false) {
 }
 
 
@@ -31,7 +31,16 @@ Exit* Room::GetExit(const string direction) const {
 }
 
 void Room::Look(bool full_description) {
-    _visited = true;
-    std::cout << GetDescription() << std::endl;
 
+    if (full_description) {
+        std::cout << GetDescription() << std::endl;
+        return;
+    } else if (long_descriptions == 2) {
+        std::cout << GetDescription() << std::endl;
+        return;
+    } else if (long_descriptions == 0 && _visited == false) {
+        _visited = true;
+        std::cout << GetDescription() << std::endl;
+        return;
+    }
 }

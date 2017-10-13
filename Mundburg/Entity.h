@@ -20,7 +20,7 @@ enum class EntityType {
 class Entity {
 public:
 
-    Entity(const char* name = "NONAME", const char* description = "NODESCRIPTION", EntityType type = EntityType::ENTITY, Entity* parent = nullptr);
+    Entity(const char* name = "NONAME", const char* description = "NODESCRIPTION", Entity* parent = nullptr, EntityType type = EntityType::ENTITY);
     virtual ~Entity();
 
     void RemoveChild(Entity* child);
