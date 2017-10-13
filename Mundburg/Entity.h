@@ -20,7 +20,7 @@ enum class EntityType {
 class Entity {
 public:
 
-    Entity(const char* name = "NONAME", const char* description = "NODESCRIPTION", Entity* parent = nullptr);
+    Entity(const char* name = "NONAME", const char* description = "NODESCRIPTION", Entity* parent = nullptr, EntityType type = EntityType::ENTITY);
     virtual ~Entity();
 
     void RemoveChild(Entity* child);
@@ -47,5 +47,7 @@ private:
     vector<Entity*> _childs;
 
 };
+
+extern int long_descriptions;                                 // 0 = Normal Description, 1 = Short Description, 2 = Long Description
 
 #endif

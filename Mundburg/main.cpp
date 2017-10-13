@@ -9,16 +9,11 @@
 
 using namespace std;
 
-void Lol(string hola) {
-    cout << hola;
-}
+int long_descriptions;
 
 int main() {
 
-    Entity* a = new Entity("Padre", "Es el padre");
-    Entity* b = new Entity();
-    Entity* c = new Entity();
-    
+    long_descriptions = 0;                              // 0 = Normal Description, 1 = Short Description, 2 = Long Description
 
 	char key;
 	string player_input;
