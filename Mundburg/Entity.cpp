@@ -1,4 +1,6 @@
 #include "Entity.h"
+#include "Room.h"
+#include "GlobalFunctions.h"
 
 
 
@@ -17,6 +19,42 @@ void Entity::RemoveChild(Entity* child) {
     for (int i = 0; i < _childs.size(); i++) {
         if (_childs[i] == child) {
             _childs.erase(_childs.begin() + i);
+        }
+    }
+}
+void Entity::ChangeParent(Entity* new_parent) {
+    if (_parent != nullptr) {
+        _parent->RemoveChild(this);
+    }
+    _parent = new_parent;
+    if (_parent != nullptr) {
+        _parent->SetChild(this);
+    }
+}
+
+bool Entity::Find(const Entity* entity) const {
+    for (int i = 0; i < _childs.size(); i++) {
+        if (_childs[i] == entity) {
+            return true;
+        }
+    }
+    return false;
+}
+
+Entity* Entity::Find(const string name, EntityType type) const {
+    for (int i = 0; i < _childs.size(); i++) {
+        if (_childs[i]->_type == type) {
+            if (Compare(_childs[i]->_name, name)) {
+                return _childs[i];
+            }
+        }
+    }
+    return nullptr;
+}
+void Entity::FindAll(EntityType type, vector<Entity*>& container) const {
+    for (int i = 0; i < _childs.size(); i++) {
+        if (_childs[i]->_type == type) {
+            container.push_back(_childs[i]);
         }
     }
 }

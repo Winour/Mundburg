@@ -16,6 +16,7 @@ enum class EntityType {
     ITEM
 };
 
+class Room;
 
 class Entity {
 public:
@@ -24,6 +25,10 @@ public:
     virtual ~Entity();
 
     void RemoveChild(Entity* child);
+    void ChangeParent(Entity* new_parent);
+    bool Find(const Entity* entity) const;
+    Entity* Find(const string name, EntityType type) const;
+    void FindAll(EntityType type, vector<Entity*>& container) const;
 
     // Getters
     std::string GetName() const;

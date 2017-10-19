@@ -24,6 +24,7 @@ void Room::SetExit(Exit* exit) {
 Exit* Room::GetExit(const string direction) const {
     for (int i = 0; i < _exits.size(); i++) {
         if (_exits[i]->GetDirection() == direction) {
+
             return _exits[i];
         }
     }
@@ -31,7 +32,7 @@ Exit* Room::GetExit(const string direction) const {
 }
 
 void Room::Look(bool full_description) {
-
+    cout <<GetName() << std::endl << std::endl;
     if (full_description) {
         std::cout << GetDescription() << std::endl;
         return;
@@ -40,7 +41,7 @@ void Room::Look(bool full_description) {
         return;
     } else if (long_descriptions == 0 && _visited == false) {
         _visited = true;
-        std::cout << GetDescription() << std::endl;
+        std::cout << GetDescription()<<std::endl;
         return;
     }
 }

@@ -12,7 +12,6 @@ using namespace std;
 int long_descriptions;
 
 int main() {
-
     long_descriptions = 0;                              // 0 = Normal Description, 1 = Short Description, 2 = Long Description
 
 	char key;
@@ -20,6 +19,7 @@ int main() {
 	vector<string> instructions;
 	instructions.reserve(10);
 
+    World world;
 
 	while (true) {
 
@@ -41,23 +41,25 @@ int main() {
 				cout << key;
             } else {                                                            // Enter
                 EnterInstructions(instructions, player_input);
+                std::cout << std::endl;
             }
 		}
 
         if (instructions.size() > 0 && Compare(instructions[0], "quit")) {
             break;
         }
-
+        if ( instructions.size() > 0 && world.Tick(instructions) == false) {
+            std::cout << "I did not understand you \n";
+        }
         // TODO : Process the input
 
         if (instructions.size() > 0) {
             instructions.clear();
             player_input = "";
-            std::cout << "\n\n";
+            std::cout << "\n";
         }
 
 	}
-
 
     std::cout << "\n\n";
     std::cout << "........................................................................" << std::endl;

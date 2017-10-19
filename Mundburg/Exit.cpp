@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-Exit::Exit(const char* name, const char* description, Room* room, std::string direction, Entity* key, bool closed, bool locked) :
-Entity(name, description, room, EntityType::EXIT), _destination(room), _direction(direction), _key(key), _closed(closed), _locked(locked)
+Exit::Exit(const char* name, const char* description, Room* room, Room* destination, std::string direction, Entity* key, bool closed, bool locked) :
+Entity(name, description, room, EntityType::EXIT), _destination(destination), _direction(direction), _key(key), _closed(closed), _locked(locked)
 {
 
 }
@@ -14,6 +14,7 @@ Exit::~Exit() {
 }
 
 std::string Exit::GetDirection() const {
+
     return _direction;
 }
 
