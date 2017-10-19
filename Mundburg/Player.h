@@ -2,7 +2,7 @@
 #define __Player__
 
 #include "Creature.h"
-
+#include <iostream>
 using namespace std;
 
 class Player : public Creature {
@@ -11,6 +11,7 @@ public:
     ~Player();
 
     bool Go(vector<string>& instructions);
+	bool Open(vector<string>& instructions);
     void Look() const;
 
 };

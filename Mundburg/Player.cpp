@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Exit.h"
 #include "Room.h"
+#include "GlobalFunctions.h"
 
 
 
@@ -29,6 +30,24 @@ bool Player::Go(vector<string>& instructions) {
         GetRoom()->Look();
         return true;
     }
+}
+
+bool Player::Open(vector<string>& instructions) {
+
+	switch (instructions.size()) {//DOING
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		if (Compare((instructions[1] + " " + instructions[2]), "Wooden door")) {
+			cout << "WII";
+		}
+		break;
+	default:
+		break;
+	}
+	return true;
 }
 
 void Player::Look() const {

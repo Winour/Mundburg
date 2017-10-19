@@ -22,13 +22,29 @@ World::World() {
     entities.push_back(warehouse);
     entities.push_back(secret_room);
 
-    Exit* e1 = new Exit("A", "B", hall, stairs, "north", nullptr, true, false);
-    Exit* e2 = new Exit("Wooden door", "It looks like a normal wooden door.", hall, dungeon, "east", nullptr, true, false);
-    Exit* e3 = new Exit("Wooden door", "It looks like a normal wooden door.", hall, warehouse, "west", nullptr, true, false);
+    Exit* e1 = new Exit("Iron", "It has nothing special", hall, stairs, "north", nullptr, true, false);
+    Exit* e2 = new Exit("Grey", "It looks like a normal door.", hall, dungeon, "east", nullptr, true, false);
+    Exit* e3 = new Exit("Wooden", "It looks like a normal wooden door.", hall, warehouse, "west", nullptr, true, false);
     hall->SetExit(e1);
     hall->SetExit(e2);
-    Exit* e4 = new Exit("Steel door", "It is made of steel, however, it is so light...", stairs, library, "up", nullptr, false, false);
-    stairs->SetExit(e4);
+	hall->SetExit(e3);
+
+    Exit* e4 = new Exit("Steel", "It is made of steel, however, it is so light...", stairs, library, "up", nullptr, false, false);
+	Exit* e5 = new Exit("Iron", "It has nothing special", stairs, hall, "down", nullptr, false, false);
+	stairs->SetExit(e4);
+	stairs->SetExit(e5);
+
+	Exit* e6 = new Exit("Steel", "It is made of steel, however, it is so light...", library, stairs, "east", nullptr, false, false);
+	library->SetExit(e6);
+
+	Exit* e7 = new Exit("Grey", "It looks like a normal door.", dungeon, hall, "west", nullptr, false, false);
+	dungeon->SetExit(e7);
+
+	Exit* e8 = new Exit("Wooden", "It looks like a normal wooden door.", warehouse, hall, "east", nullptr, false, false);
+	Exit* e9 = new Exit("Secret", "It looks like the door doesn't want to be opened...", warehouse, secret_room, "east", nullptr, false, false);
+	warehouse->SetExit(e8);
+	warehouse->SetExit(e9);	
+
     player = new Player("Lancelot", "Handsome heroe", hall);
     player->Look();
 
@@ -182,17 +198,11 @@ bool World::ParseInstructions(vector<string>& instructions) {
 
                 player->Go(instructions); //TODO
 
-            //} else if (Compare(instructions[0], "east")) {
+            }else if (Compare(instructions[0], "open")) {
 
-            //    instructions.push_back("east");
-            //    player->Go(instructions);
+				player->Open(instructions);//TODO
 
-            //} else if (Compare(instructions[0], "west")) {
-
-            //    instructions.push_back("west");
-            //    player->Go(instructions);
-
-            } else {
+			} else {
 
                 ret = false;
 
