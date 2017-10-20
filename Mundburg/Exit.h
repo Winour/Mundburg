@@ -13,7 +13,7 @@ class Room;
 
 class Exit : public Entity{
 public:
-    Exit(const char* name, const char* description, Room* room, Room* destination, std::string direction, Entity* key, bool closed, bool locked);
+    Exit(const char* name, const char* description, const char* long_description, Room* room, Room* destination, std::string direction, Entity* key, bool closed, bool locked);
     ~Exit();
 
     //Getters

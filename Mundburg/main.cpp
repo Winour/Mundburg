@@ -11,17 +11,21 @@ using namespace std;
 
 int long_descriptions;
 
+
+
 int main() {
     long_descriptions = 0;                              // 0 = Normal Description, 1 = Short Description, 2 = Long Description
 
 	char key;
+    bool game_over = false;
 	string player_input;
 	vector<string> instructions;
+
 	instructions.reserve(10);
 
     World world;
 
-	while (true) {
+	while (!game_over) {
 
 		if (_kbhit() != 0) {	
 
@@ -41,17 +45,33 @@ int main() {
 				cout << key;
             } else {                                                            // Enter
                 EnterInstructions(instructions, player_input);
-                std::cout << std::endl;
+                std::cout << std::endl <<std::endl;
             }
 		}
+        switch (world.Tick(instructions)) {
+            case Game_States::EXIT:
+                game_over = true;
+                break;
+            case Game_States::DEAD:
+                std::cout << "You are dead\n";
+                game_over = true;
+                break;
+            case Game_States::REPEAT_INSTRUCTION:
+                std::cout << "I did not understand you \n";
+                break;
+            case Game_States::WIN:
+                std::cout << "YOU WIN!!!!!\n";
+                break;
+            default:
+                break;
+        }
+        //if (instructions.size() > 0 && Compare(instructions[0], "quit")) {
+        //    break;
+        //}
 
-        if (instructions.size() > 0 && Compare(instructions[0], "quit")) {
-            break;
-        }
-        if ( instructions.size() > 0 && world.Tick(instructions) == false) {
-            std::cout << "I did not understand you \n";
-        }
-        // TODO : Process the input
+        //if (world.Tick(instructions) == false) {
+        //    std::cout << "I did not understand you \n";
+        //}
 
         if (instructions.size() > 0) {
             instructions.clear();

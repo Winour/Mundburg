@@ -14,18 +14,17 @@ class Exit;
 class Room : public Entity {
 public:
 
-    Room(const char* name = "NONAME", const char* description = "NODESCRIPTION");
+    Room(const char* name, const char* description, const char* long_description);
     ~Room();
 
     void SetExit(Exit* exit);
     Exit* GetExit(const string direction) const;
+    void GetExits() const;
 
     void Look(bool full_description = false);
-
+    vector<Exit*> exits;
 
 private:
-
-    vector<Exit*> _exits;
     bool _visited;
 
 

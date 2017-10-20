@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "GlobalFunctions.h"
+
 #include <iostream>
 using namespace std;
 
@@ -17,8 +19,8 @@ public:
     ~World();
 
 public:
-    bool Tick(vector<string>& instructions);
-    bool ParseInstructions(vector<string>& instructions);
+    Game_States Tick(vector<string>& instructions);
+    Game_States ParseInstructions(vector<string>& instructions);
     void GameLoop();
     Player* player;
     vector<Entity*> entities;

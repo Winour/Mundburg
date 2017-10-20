@@ -1,5 +1,6 @@
 #include "World.h"
 #include "Entity.h"
+#include "Item.h"
 #include "Room.h"
 #include "Exit.h"
 #include "Creature.h"
@@ -9,12 +10,12 @@
 
 
 World::World() {
-    Room* hall = new Room("Hall", "There is not too much to see.\n3 doors, a huge pile of rocks blocks the 4th one behind you.");
-    Room* stairs = new Room("Stairs", "A spiral staircase communicates the first floor\nwith the upper room of the castle.");
-    Room* dungeon = new Room("Dungeon", "A dark dungeon, it seems that someone lives in here.");
-    Room* library = new Room("Library", "The room is full of books, however,\nthere's one that draws your attention.\nThe door is to the east.");
-    Room* warehouse = new Room("Warehouse", "There are some shelves, they could contain something interesting.\nYou notice something on the south wall.");
-    Room* secret_room = new Room("Secret Room", "Why are the walls shining?");
+    Room* hall = new Room("Hall", "It's a large room, it has 3 doors but none similar to each other.", "");
+    Room* stairs = new Room("Stairs", "A spiral staircase communicates the first floor\nwith the upper room of the castle.", "");
+    Room* dungeon = new Room("Dungeon", "A dark dungeon, it seems that someone lives in here.", "");
+    Room* library = new Room("Library", "The room is full of books, however,\nthere's one that draws your attention.\nThe door is to the east.", "");
+    Room* warehouse = new Room("Warehouse", "There are some shelves, they could contain something interesting.\nYou notice something on the south wall.", "");
+    Room* secret_room = new Room("Secret Room", "Why are the walls shining?", "");
     entities.push_back(hall);
     entities.push_back(stairs);
     entities.push_back(dungeon);
@@ -22,31 +23,44 @@ World::World() {
     entities.push_back(warehouse);
     entities.push_back(secret_room);
 
-    Exit* e1 = new Exit("Iron", "It has nothing special", hall, stairs, "north", nullptr, true, false);
-    Exit* e2 = new Exit("Grey", "It looks like a normal door.", hall, dungeon, "east", nullptr, true, false);
-    Exit* e3 = new Exit("Wooden", "It looks like a normal wooden door.", hall, warehouse, "west", nullptr, true, false);
+    player = new Player("Lancelot", "Handsome heroe", "", hall);
+
+    Item* a = new Item("Rock", "It's a rock", "", Item_type::STANDARD, player, 1, 10);
+    Item* b = new Item("Key", "It's a rock", "", Item_type::KEY, player, 1, 10);
+    Item* c = new Item("Malla", "It's a rock", "", Item_type::ARMOR, player, 1, 10);
+    Item* d = new Item("Espada", "It's a rock", "", Item_type::WEAPON, player, 1, 10);
+    Item* e = new Item("Rock", "It's a rock", "", Item_type::CONTAINER, player, 1, 10);
+    Item* g = new Item("Water", "It's a rock", "", Item_type::FLUID, e, 1, 10);
+    Item* water = new Item("Water", "A water leak breaks the silence of the room.", "", Item_type::FLUID, hall, 1, 1);
+    Item* rocks = new Item("Rocks", "A huge pile of rocks blocks the 4th door behind you.", "", Item_type::NOT_PICKABLE, hall, 1, 1);
+
+    Exit* e1 = new Exit("Iron door", "It has nothing special", "", hall, stairs, "north", nullptr, true, false);
+    Exit* e2 = new Exit("Grey door", "It looks like a normal door.", "", hall, dungeon, "east", nullptr, true, false);
+    Exit* e3 = new Exit("Wooden door", "It looks like a normal wooden door.", "", hall, warehouse, "west", nullptr, true, false);
     hall->SetExit(e1);
     hall->SetExit(e2);
 	hall->SetExit(e3);
 
-    Exit* e4 = new Exit("Steel", "It is made of steel, however, it is so light...", stairs, library, "up", nullptr, false, false);
-	Exit* e5 = new Exit("Iron", "It has nothing special", stairs, hall, "down", nullptr, false, false);
+    Exit* e4 = new Exit("Steel door", "It is made of steel, however, it is so light...", "", stairs, library, "up", nullptr, false, false);
+	Exit* e5 = new Exit("Iron door", "It has nothing special", "", stairs, hall, "down", nullptr, false, false);
 	stairs->SetExit(e4);
 	stairs->SetExit(e5);
 
-	Exit* e6 = new Exit("Steel", "It is made of steel, however, it is so light...", library, stairs, "east", nullptr, false, false);
+	Exit* e6 = new Exit("Steel door", "It is made of steel, however, it is so light...", "", library, stairs, "east", nullptr, false, false);
 	library->SetExit(e6);
 
-	Exit* e7 = new Exit("Grey", "It looks like a normal door.", dungeon, hall, "west", nullptr, false, false);
+	Exit* e7 = new Exit("Grey door", "It looks like a normal door.", "", dungeon, hall, "west", nullptr, false, false);
 	dungeon->SetExit(e7);
 
-	Exit* e8 = new Exit("Wooden", "It looks like a normal wooden door.", warehouse, hall, "east", nullptr, false, false);
-	Exit* e9 = new Exit("Secret", "It looks like the door doesn't want to be opened...", warehouse, secret_room, "east", nullptr, false, false);
+	Exit* e8 = new Exit("Wooden door", "It looks like a normal wooden door.", "", warehouse, hall, "east", nullptr, false, false);
+	Exit* e9 = new Exit("Secret door", "It looks like the door doesn't want to be opened...", "", warehouse, secret_room, "east", nullptr, false, false);
 	warehouse->SetExit(e8);
 	warehouse->SetExit(e9);	
 
-    player = new Player("Lancelot", "Handsome heroe", hall);
+
+
     player->Look();
+    std::cout << "\n";
 
 }
 
@@ -54,23 +68,26 @@ World::World() {
 World::~World() {
 }
 
-bool World::Tick(vector<string>& instructions) {
-    bool ret = true;
+Game_States World::Tick(vector<string>& instructions) {
+    Game_States ret = Game_States::CONTINUE;
 
     if (instructions.size() > 0 && instructions[0].length() > 0) {
         ret = ParseInstructions(instructions);
     }
 
     GameLoop();
-    return ret;    
+    
+    return ret;
 }
 
-bool World::ParseInstructions(vector<string>& instructions) {
-    bool ret = true;
+Game_States World::ParseInstructions(vector<string>& instructions) {
+    Game_States ret = Game_States::CONTINUE;
 
     switch (instructions.size()) {
         case 1:
-            if (Compare(instructions[0], "look") || Compare(instructions[0], "l")) {
+            if (Compare(instructions[0], "quit")) {
+                ret = Game_States::EXIT;
+            } else if (Compare(instructions[0], "look") || Compare(instructions[0], "l")) {
 
                 player->Look();
 
@@ -104,9 +121,27 @@ bool World::ParseInstructions(vector<string>& instructions) {
                 instructions.push_back("down");
                 player->Go(instructions);
 
-            } else if (Compare(instructions[0], "suicide")) {
+            } else if (Compare(instructions[0], "superbrief")) {
 
-                player->Look();         // TODO
+                std::cout << "Superbrief mode: now you won't get rooms description,\neven if you haven't been there before.\nUnless you use 'Look'.";
+                long_descriptions = 1;
+
+            } else if (Compare(instructions[0], "brief")) {
+
+                std::cout << "Brief mode: now you will only get rooms description\nif you haven't been there before or you use 'look'";
+                long_descriptions = 0;
+
+            } else if (Compare(instructions[0], "long")) {
+
+                std::cout << "Long mode: now you will always get rooms description";
+                long_descriptions = 2;
+
+            } else if (Compare(instructions[0], "suicide")) {
+                std::cout << "You realise that this is the end and there's nothing you can do...\n";
+                std::cout << "You slowly take a pill from your pocket...Cyanide...\n"; 
+                std::cout << "While the pill enters on your mouth,\nall you can think is if you are going to get a good grade on programming.\n";
+                player->ReciveDmg(50000);
+                ret = Game_States::DEAD;
 
             } else if (Compare(instructions[0], "examine")) {
 
@@ -114,7 +149,7 @@ bool World::ParseInstructions(vector<string>& instructions) {
 
             } else if (Compare(instructions[0], "inventory") || Compare(instructions[0], "i")) {
 
-                player->Look();//TODO
+                player->Inventory();
 
             } else if (Compare(instructions[0], "heal")) {
 
@@ -122,15 +157,54 @@ bool World::ParseInstructions(vector<string>& instructions) {
 
             } else if (Compare(instructions[0], "equipment")) {
 
-                player->Look();//TODO
+                player->Equipment();//TODO
+
+            } else if (Compare(instructions[0], "exits")) {
+
+                player->GetRoom()->GetExits();
 
             } else if (Compare(instructions[0], "instructions") || Compare(instructions[0], "help")) {
 
-                player->Look();//TODO
+                std::cout << "Welcome to Mundburg:\n" << std::endl;
+                std::cout << "In this game, you have to explore the castle and find items, equipment and learn spells" << std::endl;
+                std::cout << "in order to defeat a final boss." << std::endl;
+                std::cout << "You can use some of the following commands:" << std::endl;
+                std::cout << "  -GO + DIRECTION: if you dont know which directions you can go, type the comand 'exits'\nto get all possible directions. You can also omit 'GO'." << std::endl;
+                std::cout << "  -SUPERBRIEF: you won't get rooms description, even if you haven't been there before.\nUnless you use 'Look'." << std::endl;
+                std::cout << "  -BRIEF: you will only get rooms description if you haven't been there before or use 'Look'." << std::endl;
+                std::cout << "  -LONG: you will always get rooms description." << std::endl;
+                std::cout << "  -SUICIDE: if you give up..." << std::endl;
+                std::cout << "  -EXAMINE + WHAT TO EXAMINE: if you don't specify what to examine, you will examine yourself." << std::endl;
+                std::cout << "  -INVENTORY: a list of all your items." << std::endl;
+                std::cout << "  -EQUIPMENT: your armor and your weapon." << std::endl;
+                std::cout << "  -EQUIP + WHAT TO EQUIP: equip a weapon or an armor." << std::endl;
+                std::cout << "  -TAKE + WHAT TO TAKE: take something from the room." << std::endl;
+                std::cout << "  -DROP + WHAT TO DROP: drop something." << std::endl;
+                std::cout << "  -THROW + WHAT TO THROW + TO + OBJECTIVE: throw a item of your inventory to something." << std::endl;
+                std::cout << "  -LOOT + DEAD BODY TO LOOT: take all useful items from a dead body." << std::endl;
+                std::cout << "These are some useful commands, there might be some more, for example: UNEQUIP, OPEN, CLOSE, UNLOCK..." << std::endl;
+
+            } else if (Compare(instructions[0], "commands")) {
+
+                std::cout << "You can use some of the following commands:" << std::endl;
+                std::cout << "  -GO + DIRECTION: if you dont know which directions you can go, type the comand 'exits'\nto get all possible directions. You can also omit 'GO'." << std::endl;
+                std::cout << "  -SUPERBRIEF: you won't get rooms description, even if you haven't been there before.\nUnless you use 'Look'." << std::endl;
+                std::cout << "  -BRIEF: you will only get rooms description if you haven't been there before or use 'Look'." << std::endl;
+                std::cout << "  -LONG: you will always get rooms description." << std::endl;
+                std::cout << "  -SUICIDE: if you give up..." << std::endl;
+                std::cout << "  -EXAMINE + WHAT TO EXAMINE: if you don't specify what to examine, you will examine yourself." << std::endl;
+                std::cout << "  -INVENTORY: a list of all your items." << std::endl;
+                std::cout << "  -EQUIPMENT: your armor and your weapon." << std::endl;
+                std::cout << "  -EQUIP + WHAT TO EQUIP: equip a weapon or an armor." << std::endl;
+                std::cout << "  -TAKE + WHAT TO TAKE: take something from the room." << std::endl;
+                std::cout << "  -DROP + WHAT TO DROP: drop something." << std::endl;
+                std::cout << "  -THROW + WHAT TO THROW + TO + OBJECTIVE: throw a item of your inventory to something." << std::endl;
+                std::cout << "  -LOOT + DEAD BODY TO LOOT: take all useful items from a dead body." << std::endl;
+                std::cout << "These are some useful commands, there might be some more, for example: UNEQUIP, OPEN, CLOSE, UNLOCK..." << std::endl;
 
             } else {
 
-                ret = false;
+                ret = Game_States::REPEAT_INSTRUCTION;
 
             }
             break;
@@ -149,7 +223,7 @@ bool World::ParseInstructions(vector<string>& instructions) {
 
             } else if (Compare(instructions[0], "equip")) {
 
-                player->Go(instructions);//TODO
+                player->Equip(instructions);
 
             } else if (Compare(instructions[0], "unequip")) {
 
@@ -185,7 +259,7 @@ bool World::ParseInstructions(vector<string>& instructions) {
 
             } else {
 
-                ret = false;
+                //ret = false;
 
             }
             break;
@@ -200,17 +274,21 @@ bool World::ParseInstructions(vector<string>& instructions) {
 
             }else if (Compare(instructions[0], "open")) {
 
-				player->Open(instructions);//TODO
+				player->Open(instructions);
 
-			} else {
+			}else if (Compare(instructions[0], "close")) {
 
-                ret = false;
+                player->Close(instructions);
+
+            } else {
+
+                //ret = false;
 
             }
             break;
         case 4:
             if (Compare(instructions[0], "lock")) {
-
+                
                 player->Look();//TODO
 
             } else if (Compare(instructions[0], "unlock")) {
@@ -224,12 +302,13 @@ bool World::ParseInstructions(vector<string>& instructions) {
 
             } else {
 
-                ret = false;
+                //ret = false;
 
             }
             break;
         default:
-            ret = false;
+            // = false;
+            break;
     }
     return ret;
 }

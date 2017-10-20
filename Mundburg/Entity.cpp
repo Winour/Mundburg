@@ -4,8 +4,8 @@
 
 
 
-Entity::Entity(const char* name, const char* description, Entity* parent, EntityType type) :
-_name(name), _description(description),  _parent(parent), _type(type) {
+Entity::Entity(const char* name, const char* description,const char* long_description, Entity* parent, EntityType type) :
+_name(name), _description(description),  _parent(parent), _type(type), _long_description(long_description){
 
     if (parent != nullptr) {
         parent->SetChild(this);
@@ -79,6 +79,10 @@ EntityType Entity::GetType() const {
     return _type;
 }
 
+std::string Entity::GetLongDescription() const {
+    return _long_description;
+}
+
 void Entity::SetChild(Entity* child) {
 
     for (int i = 0; i < _childs.size(); i++) {                  // Looks for child duplication
@@ -94,10 +98,14 @@ void Entity::SetParent(Entity* parent) {
     _parent = parent;
 }
 
-void Entity::SetName(std::string new_name) {
+void Entity::SetName(std::string& new_name) {
     _name = new_name;
 }
 
-void Entity::SetDescription(std::string new_description) {
+void Entity::SetDescription(std::string& new_description) {
     _description = new_description;
+}
+
+void Entity::SetLongDescription(std::string& new_long_description) {
+    _long_description = new_long_description;
 }
