@@ -48,7 +48,7 @@ void Room::Look(int long_descriptions, bool full_description) {
     }
     _visited = true;
     for (size_t i = 0; i < GetChilds().size(); i++) {
-        if (GetChilds()[i]->GetType() == EntityType::ITEM) {
+        if (GetChilds()[i]->GetType() == EntityType::ITEM || GetChilds()[i]->GetType() == EntityType::NPC) {
             std::cout << GetChilds()[i]->GetName() << ": " << GetChilds()[i]->GetDescription() << std::endl;
         }
     }

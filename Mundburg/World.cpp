@@ -6,6 +6,7 @@
 #include "Exit.h"
 #include "Creature.h"
 #include "Player.h"
+#include "NPC.h"
 #include "GlobalFunctions.h"
 
 
@@ -25,6 +26,8 @@ World::World() {
     entities.push_back(secret_room);
 
     player = new Player("Lancelot", "Handsome heroe", "", hall);
+
+    NPC* npc = new NPC("Enemy", "Ugly enemy", "", hall);
 
     Item* a = new Item("Rock", "It's a rock", "", ItemType::STANDARD, player, 1, 10);
     Item* b = new Item("Key", "It's a rock", "", ItemType::KEY, player, 1, 10);
@@ -236,7 +239,7 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
 
             } else if (Compare(instructions[0], "attack")) {
 
-                player->Go(instructions);//TODO
+                player->Attack(instructions);
 
             } else if (Compare(instructions[0], "loot")) {
 
@@ -300,6 +303,10 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
             } else if (Compare(instructions[0], "examine")) {
 
                 player->Examine(instructions);
+
+            } else if (Compare(instructions[0], "attack")) {
+
+                player->Attack(instructions);
 
             } else {
 

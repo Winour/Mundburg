@@ -13,7 +13,7 @@ class Exit;
 
 class Creature : public Entity {
 public:
-    Creature(const char* name, const char* description,const char* long_description, Room* room, EntityType type = EntityType::CREATURE);
+    Creature(const char* name, const char* description,const char* long_description, Room* room, int lvl = 5, EntityType type = EntityType::CREATURE);
     ~Creature();
 
     Room* GetRoom() const;
@@ -38,6 +38,7 @@ public:
 
 private:
     int _level;
+    int _exp;
     int _max_hp;
     int _max_mana;
     Item* _weapon;

@@ -10,7 +10,7 @@ class Item;
 
 class Player : public Creature {
 public:
-    Player(const char* name, const char* description, const char* long_description, Room* room, EntityType type = EntityType::PLAYER);
+    Player(const char* name, const char* description, const char* long_description, Room* room);
     ~Player();
 
     bool Go(vector<string>& instructions);
@@ -26,6 +26,7 @@ public:
     void Unlock(vector<string>& instructions);
     void Lock(vector<string>& instructions);
     void Throw(vector<string>& instructions);
+    void Attack(vector<string>& instructions);
 
 public:
     int long_descriptions = 0;                      // 0 = Normal Description, 1 = Short Description, 2 = Long Description

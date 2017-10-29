@@ -12,6 +12,7 @@ enum class EntityType {
     ROOM,
     EXIT,
     PLAYER,
+    NPC,
     CREATURE,
     ITEM
 };

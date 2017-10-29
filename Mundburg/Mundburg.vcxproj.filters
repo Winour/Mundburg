@@ -45,6 +45,9 @@
     <ClCompile Include="Box.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlobalFunctions.h">
@@ -72,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Box.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

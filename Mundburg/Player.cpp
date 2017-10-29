@@ -7,8 +7,8 @@
 
 
 
-Player::Player(const char* name, const char* description, const char* long_description, Room* room, EntityType type):
-    Creature(name, description, long_description, room, type)
+Player::Player(const char* name, const char* description, const char* long_description, Room* room):
+    Creature(name, description, long_description, room, 5, EntityType::PLAYER)
 {
 }
 
@@ -101,8 +101,8 @@ void Player::Examine(vector<string>& instructions) const {
             std::cout << GetName() << " Level " << GetLevel()<< ": " << GetDescription() << "." << std::endl << std::endl;
             std::cout << "Stats:" << std::endl;
 
-            std::cout << "   Health -> " << GetMaxHp() << "/" << hp << std::endl;
-            std::cout << "   Mana -> " << GetMaxMana() << "/" << hp << std::endl;
+            std::cout << "   Health -> " << hp << "/" << GetMaxHp() << std::endl;
+            std::cout << "   Mana -> " << mana << "/" << GetMaxMana() << std::endl;
             if (GetWeapon() == nullptr) {
                 std::cout << "   Attack -> " << attack << " (+0)" << endl;
             } else {
@@ -505,4 +505,23 @@ void Player::Throw(vector<string>& instructions) {
     default:
         break;
     }
+}
+
+void Player::Attack(vector<string>& instructions) {
+    switch (instructions.size()) {
+        case 2:
+            for (size_t i = 0; i < GetRoom()->GetChilds().size(); i++) {
+                if (Compare(instructions[1], GetRoom()->GetChilds()[i]->GetName())) {
+                    Creature::Attack(GetRoom()->GetChilds()[i]);
+                }
+            }
+            break;
+        case 3:
+            for (size_t i = 0; i < GetRoom()->GetChilds().size(); i++) {
+                if (Compare(instructions[1] + " " + instructions[2], GetRoom()->GetChilds()[i]->GetName())) {
+                    Creature::Attack(GetRoom()->GetChilds()[i]);
+                }
+            }
+            break;
+        }
 }
