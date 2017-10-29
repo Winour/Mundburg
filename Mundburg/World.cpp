@@ -37,6 +37,7 @@ World::World() {
     Item* ironKey = new Item("Iron Key", "A shiny iron key.", "", ItemType::KEY, hall, 1, 1);
     Item* woodKey = new Item("Wooden Key", "An old wooden key.", "", ItemType::KEY, hall, 1, 1);
     Box* box = new Box("Box", "A box", "", hall);
+    Item* asd = new Item("asd", "", "", ItemType::STANDARD, box, 1, 1);
 
     Exit* e1 = new Exit("Iron door", "It has nothing special", "", hall, stairs, "north", ironKey, false, false);
     Exit* e2 = new Exit("Grey door", "It looks like a normal door.", "", hall, dungeon, "east", nullptr, true, false);
@@ -253,9 +254,13 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
 
                 player->Look();//TODO
 
-            } else if (Compare(instructions[0], "open")) {      // DOING 
+            } else if (Compare(instructions[0], "open")) {
 
-                player->Look();//TODO
+                player->Open(instructions);
+
+            }else if (Compare(instructions[0], "close")) {
+
+                player->Close(instructions);
 
             } else {
 
@@ -306,6 +311,10 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
             if (Compare(instructions[0], "throw")) {
 
                 player->Go(instructions);   //TODO
+
+            } else if (Compare(instructions[0], "take") && Compare(instructions[2], "from")) {
+
+                player->Take(instructions); //AAAAAAAAAAAAAAAAAAAAAAAAAA
 
             } else {
 

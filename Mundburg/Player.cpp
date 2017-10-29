@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Exit.h"
+#include "Box.h"
 #include "Room.h"
 #include "Item.h"
 #include "GlobalFunctions.h"
@@ -37,7 +38,15 @@ bool Player::Close(vector<string>& instructions) {
     switch (instructions.size()) {
     case 1:
         break;
-    case 2:
+    case 2: {
+        std::vector<Entity*> temp = GetRoom()->GetChilds();
+        for (size_t i = 0; i < temp.size(); i++) {
+            if (Compare((instructions[1]), temp[i]->GetName())) {
+                ((Box*)temp[i])->Close();
+                return true;
+            }
+        }
+    }
         break;
     case 3:
         for (size_t i = 0; i < GetRoom()->exits.size(); i++) {
@@ -60,7 +69,7 @@ bool Player::Open(vector<string>& instructions) {
             std::vector<Entity*> temp = GetRoom()->GetChilds();
             for (size_t i = 0; i < temp.size(); i++) {
                 if (Compare((instructions[1]), temp[i]->GetName())) {
-                    GetRoom()->exits[i]->Open();            // HERE OPEN BOX
+                    ((Box*)temp[i])->Open();
                     return true;
                 }
             }
@@ -288,6 +297,37 @@ void Player::Take(vector<string>& instructions, bool offset) {
                     return;
                 } else if (ItemType::NOT_PICKABLE == ((Item*)items[i])->item_type) {
                     std::cout << "You can't take that.\n";
+                    return;
+                } else if (ItemType::FLUID == ((Item*)items[i])->item_type) {
+                    std::cout << "You need a container to take that.\n";
+                    return;
+                } else {
+                    items[i]->ChangeParent(this);
+                    std::cout << "You took " << items[i]->GetName() << std::endl;
+                    return;
+                }
+            }
+        }
+        std::cout << "You can't see that.\n";
+        break;
+    case 4:
+        for (size_t i = 0; i < items.size(); i++) {
+            if (Compare(instructions[3], items[i]->GetName())) {
+                if (EntityType::CREATURE == items[i]->GetType()) {
+                    //LOOT
+                    return;
+                } else if (EntityType::EXIT == items[i]->GetType()) {
+                    std::cout << "You can't take a door...\n";
+                    return;
+                } else if (ItemType::NOT_PICKABLE == ((Item*)items[i])->item_type) {
+                    std::cout << "You can't take that.\n";
+                    return;
+                }if (ItemType::BOX == ((Item*)items[i])->item_type) {
+                    if (((Box*)items[i])->TakeItem(instructions[1].c_str(), this)) {
+                        std::cout << "You took " << instructions[1] << " from " << items[i]->GetName() << std::endl;
+                    } else {
+                        std::cout << "You can't take that.\n";
+                    }
                     return;
                 } else if (ItemType::FLUID == ((Item*)items[i])->item_type) {
                     std::cout << "You need a container to take that.\n";

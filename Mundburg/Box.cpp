@@ -1,5 +1,5 @@
 #include "Box.h"
-
+#include "GlobalFunctions.h"
 
 
 Box::Box(const char* name, const char* description, const char* long_description, Entity* parent):
@@ -27,4 +27,19 @@ void Box::Close() {
     } else {
         std::cout << GetName() << " is already closed.\n";
     }
+}
+
+bool Box::TakeItem(const char* item, Entity* new_parent) {
+    if (!_open) {
+        std::cout << "It's closed.\n";
+        return false;
+    } else {
+        for (size_t i = 0; i < GetChilds().size(); i++) {
+            if (Compare(item, GetChilds()[i]->GetName())) {
+                GetChilds()[i]->ChangeParent(new_parent);
+                return true;
+            }
+        }
+    }
+    return false;
 }

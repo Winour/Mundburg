@@ -2,8 +2,7 @@
 #define __BOX__
 
 #include "Item.h"
-
-//class Entity;
+//#include <string>
 
 class Box : public Item {
 public:
@@ -12,6 +11,7 @@ public:
 
     void Open();
     void Close();
+    bool TakeItem(const char* item, Entity* new_parent);
 
 private:
     bool _open;
