@@ -332,10 +332,7 @@ void Player::Take(vector<string>& instructions, bool offset) {
     case 4:
         for (size_t i = 0; i < items.size(); i++) {
             if (Compare(instructions[3], items[i]->GetName())) {
-                if (EntityType::CREATURE == items[i]->GetType()) {
-                    //LOOT
-                    return;
-                } else if (EntityType::EXIT == items[i]->GetType()) {
+                if (EntityType::EXIT == items[i]->GetType()) {
                     std::cout << "You can't take a door...\n";
                     return;
                 } else if (ItemType::NOT_PICKABLE == ((Item*)items[i])->item_type) {
@@ -528,4 +525,24 @@ void Player::Attack(vector<string>& instructions) {
             std::cout << "You can't see that.\n";
             break;
         }
+}
+
+void Player::DrinkPotion(vector<string>& instructions) {
+    vector<Entity*> inv;
+    FindAll(EntityType::ITEM, inv);
+    for (size_t i = 0; i < inv.size(); i++) {
+        if (Compare(instructions[1], inv[i]->GetName())) {
+            if (((Item*)inv[i])->item_type == ItemType::POTION) {
+                hp += 75;
+                if (hp > GetMaxHp()) {
+                    hp = GetMaxHp();
+                }
+                std::cout << "You restored 75Hp.\n";
+                return;
+            }
+            std::cout << "You can't drink that.\n";
+            return;
+        }
+    }
+    std::cout << "You don't have that item.\n";
 }

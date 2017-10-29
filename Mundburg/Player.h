@@ -27,6 +27,7 @@ public:
     void Lock(vector<string>& instructions);
     void Throw(vector<string>& instructions);
     void Attack(vector<string>& instructions);
+    void DrinkPotion(vector<string>& instructions);
 
 public:
     int long_descriptions = 0;                      // 0 = Normal Description, 1 = Short Description, 2 = Long Description

@@ -31,7 +31,7 @@ World::World() {
     entities.push_back(player);
     NPC* npc = new NPC("Enemy", "Ugly enemy", "", hall, 1);
     entities.push_back(npc);
-    Item* a = new Item("Rock", "It's a rock", "", ItemType::STANDARD, player, 1, 10);
+    Item* a = new Item("Rock", "It's a rock", "", ItemType::POTION, player, 1, 10);
     Item* b = new Item("Key", "It's a rock", "", ItemType::KEY, player, 1, 10);
     Item* c = new Item("Malla", "It's a rock", "", ItemType::ARMOR, player, 1, 10);
     Item* d = new Item("Espada", "It's a rock", "", ItemType::WEAPON, player, 1, 10);
@@ -270,9 +270,9 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
 
                 player->Attack(instructions);
 
-            } else if (Compare(instructions[0], "use")) {   //POTIONS
+            } else if (Compare(instructions[0], "use") || Compare(instructions[0], "drink")) {
 
-                player->Look();//TODO
+                player->DrinkPotion(instructions);
 
             } else if (Compare(instructions[0], "open")) {
 
