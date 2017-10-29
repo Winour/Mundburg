@@ -13,6 +13,7 @@ using namespace std;
 class Entity;
 class Creature;
 class Player;
+class NPC;
 
 class World {
 public:
@@ -26,6 +27,7 @@ public:
 
 private:
     Player* player;
+    NPC* finalBoss;
     vector<Entity*> entities;
     clock_t tick_timer;
 };

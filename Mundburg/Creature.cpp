@@ -73,11 +73,12 @@ void Creature::Attack(Entity* objective) {
         } else {
             dmg = attack;
         }
-        std::cout << dmg << " attack.\n";
+        std::cout << GetName() << " attacked with " << dmg << " power.\n";
         if (((Creature*)objective)->ReceiveAttack(dmg)) {
             ReceiveExp(((Creature*)objective)->GetLevel() * 40);
             ((Creature*)objective)->to_destroy = true;
             target = nullptr;
+            objective->ChangeParent(nullptr);
         }
     } else {
         std::cout << "Eeeehhhh...better don't do that...\n";
