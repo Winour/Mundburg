@@ -513,15 +513,19 @@ void Player::Attack(vector<string>& instructions) {
             for (size_t i = 0; i < GetRoom()->GetChilds().size(); i++) {
                 if (Compare(instructions[1], GetRoom()->GetChilds()[i]->GetName())) {
                     Creature::Attack(GetRoom()->GetChilds()[i]);
+                    return;
                 }
             }
+            std::cout << "You can't see that.\n";
             break;
         case 3:
             for (size_t i = 0; i < GetRoom()->GetChilds().size(); i++) {
                 if (Compare(instructions[1] + " " + instructions[2], GetRoom()->GetChilds()[i]->GetName())) {
                     Creature::Attack(GetRoom()->GetChilds()[i]);
+                    return;
                 }
             }
+            std::cout << "You can't see that.\n";
             break;
         }
 }

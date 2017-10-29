@@ -60,7 +60,7 @@ bool Creature::ReceiveAttack(int attack) {
     if ((defense / 2) < attack) {
         hp -= attack - (defense / 2);
     }
-    return IsAlive();
+    return !IsAlive();
 }
 
 void Creature::Attack(Entity* objective) {
@@ -74,6 +74,28 @@ void Creature::Attack(Entity* objective) {
             dmg = attack;
         }
         std::cout << dmg << " attack.\n";
-        ((Creature*)objective)->ReceiveAttack(dmg);
-    } 
+        if (((Creature*)objective)->ReceiveAttack(dmg)) {
+            ReceiveExp(((Creature*)objective)->GetLevel() * 40);
+        }
+    } else {
+        std::cout << "Eeeehhhh...better don't do that...\n";
+    }
+}
+
+void Creature::ReceiveExp(int exp) {
+    _exp += exp;
+    while (_exp >= 40) {
+        LevelUp();
+    }
+}
+
+void Creature::LevelUp() {
+    _level++;
+    std::cout << "Level Up! Lvl " << _level << "!\n";
+    _exp -= 40;
+    _max_hp = hp = _level * 50;
+    _max_mana = mana = _level * 10;
+    attack = _level * 7;
+    defense = _level * 5;
+    std::cout << "Hp and Mana full restored!\n";
 }

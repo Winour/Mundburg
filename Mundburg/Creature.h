@@ -27,7 +27,8 @@ public:
     bool IsAlive() const;
     bool ReceiveAttack(int attack);
     void Attack(Entity* objective);
-
+    void ReceiveExp(int exp);
+    void LevelUp();
 
 public:
     bool poisoned;
