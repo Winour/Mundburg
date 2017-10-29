@@ -45,7 +45,7 @@ int main() {
                 std::cout << std::endl <<std::endl;
             }
 		}
-        switch (world.Tick(instructions)) {
+        switch (world.Update(instructions)) {
             case Game_States::EXIT:
                 game_over = true;
                 break;

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <time.h>
 
 #include "GlobalFunctions.h"
 
@@ -18,12 +19,15 @@ public:
     World();
     ~World();
 
-public:
-    Game_States Tick(vector<string>& instructions);
+    Game_States Update(vector<string>& instructions);
     Game_States ParseInstructions(vector<string>& instructions);
     void GameLoop();
+
+
+private:
     Player* player;
     vector<Entity*> entities;
+    clock_t tick_timer;
 };
 
 #endif 

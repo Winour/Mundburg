@@ -512,7 +512,7 @@ void Player::Attack(vector<string>& instructions) {
         case 2:
             for (size_t i = 0; i < GetRoom()->GetChilds().size(); i++) {
                 if (Compare(instructions[1], GetRoom()->GetChilds()[i]->GetName())) {
-                    Creature::Attack(GetRoom()->GetChilds()[i]);
+                    Creature::SetTarget(GetRoom()->GetChilds()[i]);
                     return;
                 }
             }
@@ -521,7 +521,7 @@ void Player::Attack(vector<string>& instructions) {
         case 3:
             for (size_t i = 0; i < GetRoom()->GetChilds().size(); i++) {
                 if (Compare(instructions[1] + " " + instructions[2], GetRoom()->GetChilds()[i]->GetName())) {
-                    Creature::Attack(GetRoom()->GetChilds()[i]);
+                    Creature::SetTarget(GetRoom()->GetChilds()[i]);
                     return;
                 }
             }

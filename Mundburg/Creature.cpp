@@ -5,8 +5,8 @@
 #include <assert.h>
 
 
-Creature::Creature(const char* name, const char* description, const char* long_description, Room* room,int lvl, EntityType type):
-Entity(name, description,long_description, room, type), _level(lvl), _exp(0)
+Creature::Creature(const char* name, const char* description, const char* long_description, Room* room, int lvl, EntityType type) :
+    Entity(name, description, long_description, room, type), _level(lvl), _exp(0), target(nullptr)
 {
     _max_hp = hp = _level * 50;
     _max_mana = mana = _level * 10;
@@ -76,6 +76,8 @@ void Creature::Attack(Entity* objective) {
         std::cout << dmg << " attack.\n";
         if (((Creature*)objective)->ReceiveAttack(dmg)) {
             ReceiveExp(((Creature*)objective)->GetLevel() * 40);
+            ((Creature*)objective)->to_destroy = true;
+            target = nullptr;
         }
     } else {
         std::cout << "Eeeehhhh...better don't do that...\n";
@@ -91,11 +93,41 @@ void Creature::ReceiveExp(int exp) {
 
 void Creature::LevelUp() {
     _level++;
-    std::cout << "Level Up! Lvl " << _level << "!\n";
+    std::cout << std::endl << GetName() <<" level Up! Lvl " << _level << "!\n";
     _exp -= 40;
     _max_hp = hp = _level * 50;
     _max_mana = mana = _level * 10;
     attack = _level * 7;
     defense = _level * 5;
     std::cout << "Hp and Mana full restored!\n";
+}
+
+void Creature::SetTarget(Entity* objective) {
+    if (objective->GetType() == EntityType::EXIT) {
+        std::cout << "Why would you attack a door? To break it? Don't be lazy and search the key!!\n";
+    } else if (objective->GetType() == EntityType::NPC || objective->GetType() == EntityType::PLAYER) {
+        target = objective;
+        if (((Creature*)target)->target == nullptr) {
+            ((Creature*)target)->SetTarget(this);
+        }
+    } else {
+        std::cout << "Eeeehhhh...better don't do that...\n";
+    }
+}
+
+void Creature::Update() {
+    if (IsAlive()) {
+        if (target != nullptr) {
+            if (GetRoom()->Find(target)) {
+                std::cout << "Attack\n";
+                Attack(target);
+                return;
+            } else {
+                std::cout << "bye target\n";
+                target = nullptr;
+                return;
+            }
+        }
+        std::cout << "NO Attack";
+    }
 }

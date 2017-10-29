@@ -12,6 +12,8 @@
 
 
 World::World() {
+    tick_timer = clock();
+
     Room* hall = new Room("Hall", "It's a large room, it has 3 doors but none similar to each other.", "");
     Room* stairs = new Room("Stairs", "A spiral staircase communicates the first floor\nwith the upper room of the castle.", "");
     Room* dungeon = new Room("Dungeon", "A dark dungeon, it seems that someone lives in here.", "");
@@ -26,9 +28,9 @@ World::World() {
     entities.push_back(secret_room);
 
     player = new Player("Lancelot", "Handsome heroe", "", hall);
-
-    NPC* npc = new NPC("Enemy", "Ugly enemy", "", hall);
-
+    entities.push_back(player);
+    NPC* npc = new NPC("Enemy", "Ugly enemy", "", hall, 2);
+    entities.push_back(npc);
     Item* a = new Item("Rock", "It's a rock", "", ItemType::STANDARD, player, 1, 10);
     Item* b = new Item("Key", "It's a rock", "", ItemType::KEY, player, 1, 10);
     Item* c = new Item("Malla", "It's a rock", "", ItemType::ARMOR, player, 1, 10);
@@ -80,7 +82,7 @@ World::~World() {
     entities.clear();
 }
 
-Game_States World::Tick(vector<string>& instructions) {
+Game_States World::Update(vector<string>& instructions) {
     Game_States ret = Game_States::CONTINUE;
 
     if (instructions.size() > 0 && instructions[0].length() > 0) {
@@ -88,8 +90,30 @@ Game_States World::Tick(vector<string>& instructions) {
     }
 
     GameLoop();
-    
+
+    if (player->IsAlive() == false) {
+        ret = Game_States::DEAD;
+    }    
     return ret;
+}
+
+
+void World::GameLoop() {
+    clock_t now = clock();
+    if ((now - tick_timer) > 5000.0f) {
+        for (size_t i = 0; i < entities.size(); i++) {
+            entities[i]->Update();
+        }
+        for (size_t i = 0; i < entities.size(); i++) {
+            if (entities[i]->to_destroy) {
+                cout << entities.size() << endl;
+                delete entities[i];
+                entities.erase(entities.begin() + i);
+                cout << entities.size() << endl;
+            }
+        }
+        tick_timer = now;
+    }
 }
 
 Game_States World::ParseInstructions(vector<string>& instructions) {
@@ -249,10 +273,6 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
 
                 player->Look();         // TODO
 
-            } else if (Compare(instructions[0], "read")) {
-
-                player->Look();//TODO
-
             } else if (Compare(instructions[0], "use")) {   //POTIONS
 
                 player->Look();//TODO
@@ -272,11 +292,7 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
             }
             break;
         case 3:
-            if (Compare(instructions[0], "talk") && (Compare(instructions[1], "to") || Compare(instructions[1], "with"))) {
-
-                player->Look();//TODO
-
-            } else if (Compare(instructions[0], "pick") && Compare(instructions[1], "up")) {
+            if (Compare(instructions[0], "pick") && Compare(instructions[1], "up")) {
 
                 player->Take(instructions, true);
 
@@ -319,11 +335,7 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
             }
             break;
         case 4:
-            if (Compare(instructions[0], "throw")) {
-
-                player->Go(instructions);   //TODO
-
-            } else if (Compare(instructions[0], "take") && Compare(instructions[2], "from")) {
+            if (Compare(instructions[0], "take") && Compare(instructions[2], "from")) {
 
                 player->Take(instructions);
 
@@ -341,10 +353,6 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
             } else if (Compare(instructions[0], "lock")) {
 
                 player->Lock(instructions);
-
-            } else if (Compare(instructions[0], "throw")) {
-
-                player->Lock(instructions);//TODO
 
             } else {
 
@@ -368,8 +376,4 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
             break;
     }
     return ret;
-}
-
-void World::GameLoop() {
-
 }

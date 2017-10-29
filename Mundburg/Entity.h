@@ -30,6 +30,7 @@ public:
     bool Find(Entity* entity) const;
     Entity* Find(string name, EntityType type) const;
     void FindAll(EntityType type, vector<Entity*>& container) const;
+    virtual void Update() {};
 
     // Getters
     std::string GetName() const;
@@ -45,6 +46,9 @@ public:
     void SetParent(Entity* parent);
     void SetChild(Entity* child);
     void SetLongDescription(std::string& new_long_description);
+
+public:
+    bool to_destroy;
 
 private:
 

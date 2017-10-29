@@ -5,8 +5,8 @@
 
 
 Entity::Entity(const char* name, const char* description,const char* long_description, Entity* parent, EntityType type) :
-_name(name), _description(description),  _parent(parent), _type(type), _long_description(long_description){
-
+_name(name), _description(description),  _parent(parent), _type(type), _long_description(long_description), to_destroy(false)
+{
     if (parent != nullptr) {
         parent->SetChild(this);
     }
@@ -16,7 +16,7 @@ Entity::~Entity() {
 }
 
 void Entity::RemoveChild(Entity* child) {
-    for (int i = 0; i < _childs.size(); i++) {
+    for (size_t i = 0; i < _childs.size(); i++) {
         if (_childs[i] == child) {
             _childs.erase(_childs.begin() + i);
         }

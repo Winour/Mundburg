@@ -29,6 +29,8 @@ public:
     void Attack(Entity* objective);
     void ReceiveExp(int exp);
     void LevelUp();
+    void SetTarget(Entity* objective);
+    void Update() override;
 
 public:
     bool poisoned;
@@ -36,6 +38,7 @@ public:
     int mana;
     int attack;
     int defense;
+    Entity* target;
 
 private:
     int _level;
