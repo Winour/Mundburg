@@ -2,7 +2,6 @@
 #define __BOX__
 
 #include "Item.h"
-//#include <string>
 
 class Box : public Item {
 public:

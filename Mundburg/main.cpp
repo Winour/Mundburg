@@ -58,6 +58,7 @@ int main() {
                 break;
             case Game_States::WIN:
                 std::cout << "YOU WIN!!!!!\n";
+                game_over = true;
                 break;
             default:
                 break;

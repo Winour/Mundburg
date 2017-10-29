@@ -3,8 +3,6 @@
 
 #include <vector>
 #include "Creature.h"
-#include <iostream>
-using namespace std;
 
 class Item;
 
@@ -13,21 +11,21 @@ public:
     Player(const char* name, const char* description, const char* long_description, Room* room);
     ~Player();
 
-    bool Go(vector<string>& instructions);
-	bool Open(vector<string>& instructions);
-    bool Close(vector<string>& instructions);
+    bool Go(std::vector<std::string>& instructions);
+	bool Open(std::vector<std::string>& instructions);
+    bool Close(std::vector<std::string>& instructions);
     void Look() const;
-    void Examine(vector<string>& instructions) const;
+    void Examine(std::vector<std::string>& instructions) const;
     void Inventory()const;
     void Equipment() const;
-    void Equip(vector<string>& instructions);
-    void Unequip(vector<string>& instructions);
-    void Take(vector<string>& instructions, bool offset = false);
-    void Unlock(vector<string>& instructions);
-    void Lock(vector<string>& instructions);
-    void Throw(vector<string>& instructions);
-    void Attack(vector<string>& instructions);
-    void DrinkPotion(vector<string>& instructions);
+    void Equip(std::vector<std::string>& instructions);
+    void Unequip(std::vector<std::string>& instructions);
+    void Take(std::vector<std::string>& instructions, bool offset = false);
+    void Unlock(std::vector<std::string>& instructions);
+    void Lock(std::vector<std::string>& instructions);
+    void Throw(std::vector<std::string>& instructions);
+    void Attack(std::vector<std::string>& instructions);
+    void DrinkPotion(std::vector<std::string>& instructions);
 
 public:
     int long_descriptions = 0;                      // 0 = Normal Description, 1 = Short Description, 2 = Long Description

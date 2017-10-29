@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+using namespace std;
+
 Exit::Exit(const char* name, const char* description, const char* long_description, Room* room, Room* destination, std::string direction, Item* key, bool closed, bool locked) :
 Entity(name, description,long_description, room, EntityType::EXIT), _destination(destination), _direction(direction), _key(key), _closed(closed), _locked(locked)
 {

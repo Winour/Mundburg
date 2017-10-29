@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 
-#include <iostream>
 using namespace std;
 
 enum class EntityType {
@@ -29,7 +28,7 @@ public:
     void ChangeParent(Entity* new_parent);
     bool Find(Entity* entity) const;
     Entity* Find(string name, EntityType type) const;
-    void FindAll(EntityType type, vector<Entity*>& container) const;
+    void FindAll(EntityType type, std::vector<Entity*>& container) const;
     virtual void Update() {};
     void DropItems();
 
@@ -37,7 +36,7 @@ public:
     std::string GetName() const;
     std::string GetDescription() const;
     Entity* GetParent() const;
-    vector<Entity*> GetChilds() const;
+    std::vector<Entity*> GetChilds() const;
     EntityType GetType() const;
     std::string GetLongDescription() const;
 
@@ -58,7 +57,7 @@ private:
     std::string _long_description;
     EntityType _type;
     Entity* _parent;
-    vector<Entity*> _childs;
+    std::vector<Entity*> _childs;
 
 };
 

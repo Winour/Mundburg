@@ -2,7 +2,7 @@
 #include "Room.h"
 #include "GlobalFunctions.h"
 
-
+using namespace std;
 
 Entity::Entity(const char* name, const char* description,const char* long_description, Entity* parent, EntityType type) :
 _name(name), _description(description),  _parent(parent), _type(type), _long_description(long_description), to_destroy(false)
@@ -112,8 +112,8 @@ void Entity::SetLongDescription(std::string& new_long_description) {
 
 
 void Entity::DropItems() {
-    for (size_t i = 0; i < GetChilds().size(); i++) {
-        std::cout << GetName() << " dropped a " << GetChilds()[i]->GetName() << "!\n";
-        GetChilds()[i]->ChangeParent(_parent);
+    while (GetChilds().size() > 0) {
+        std::cout << GetName() << " dropped a " << GetChilds()[0]->GetName() << "!\n";
+        GetChilds()[0]->ChangeParent(_parent);
     }
 }

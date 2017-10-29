@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <assert.h>
-
+using namespace std;
 Room::Room(const char* name, const char* description, const char* long_description) :
 Entity(name, description, long_description, nullptr, EntityType::ROOM), _visited(false) {
 }

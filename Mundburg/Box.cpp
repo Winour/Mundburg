@@ -1,6 +1,7 @@
 #include "Box.h"
 #include "GlobalFunctions.h"
 
+using namespace std;
 
 Box::Box(const char* name, const char* description, const char* long_description, Entity* parent):
 Item(name, description, long_description, ItemType::BOX, parent, 0, 0), _open(false) {

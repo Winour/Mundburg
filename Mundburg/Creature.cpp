@@ -4,6 +4,7 @@
 #include "Exit.h"
 #include <assert.h>
 
+using namespace std;
 
 Creature::Creature(const char* name, const char* description, const char* long_description, Room* room, int lvl, EntityType type) :
     Entity(name, description, long_description, room, type), _level(lvl), _exp(0), target(nullptr)
@@ -78,7 +79,6 @@ void Creature::Attack(Entity* objective) {
             ReceiveExp(((Creature*)objective)->GetLevel() * 40);
             ((Creature*)objective)->to_destroy = true;
             target = nullptr;
-            objective->ChangeParent(nullptr);
         }
     } else {
         std::cout << "Eeeehhhh...better don't do that...\n";

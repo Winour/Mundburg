@@ -9,16 +9,20 @@
 #include "NPC.h"
 #include "GlobalFunctions.h"
 
+#include <iostream>
 
+using namespace std;
 
 World::World() {
     tick_timer = clock();
+
+    std::cout << "If you need help, type 'help'.\n\n";
 
     Room* hall = new Room("Hall", "It's a large room, it has 3 doors but none similar to each other.", "");
     Room* stairs = new Room("Stairs", "A spiral staircase communicates the first floor\nwith the upper room of the castle.", "");
     Room* dungeon = new Room("Dungeon", "A dark dungeon, it seems that someone lives in here.", "");
     Room* library = new Room("Library", "The room is full of books, however,\nthere's one that draws your attention.\nThe door is to the east.", "");
-    Room* warehouse = new Room("Warehouse", "There are some shelves, they could contain something interesting.\nYou notice something on the south wall.", "");
+    Room* warehouse = new Room("Warehouse", "There are some shelves, but they are empty.\nYou notice something on the south wall.", "");
     Room* secret_room = new Room("Secret Room", "Why are the walls shining?", "");
     entities.push_back(hall);
     entities.push_back(stairs);
@@ -35,10 +39,10 @@ World::World() {
     entities.push_back(shirt);
     entities.push_back(knife);
 
-    NPC* enemyHall = new NPC("Orc", "A naked orc", "", hall, 2);
+    NPC* enemyHall = new NPC("Orc", "A naked orc", "Mmmm...I thought that orcs had a big d**k, this may be an exception.", hall, 2);
     entities.push_back(enemyHall);
 
-    Item* potion6 = new Item("Potion", "Healing potion", "Potion", ItemType::POTION, hall, 1, 1);
+    Item* potion6 = new Item("Potion", "Healing potion", "Potion that heals 75hp", ItemType::POTION, hall, 1, 1);
     entities.push_back(potion6);
 
     Item* potion1 = new Item("Potion", "Healing potion", "Potion", ItemType::POTION, enemyHall, 1, 1);
@@ -46,27 +50,27 @@ World::World() {
     entities.push_back(potion1);
     entities.push_back(ironKey);
 
-    NPC* enemyWarehhouse = new NPC("Dog", "That dog has the rabies.", "", warehouse, 4);
+    NPC* enemyWarehhouse = new NPC("Dog", "That dog has the rabies.", "Who is a good booooy?? You are not!!", warehouse, 4);
     entities.push_back(enemyWarehhouse);
 
-    Item* potion2 = new Item("Potion", "Healing potion.", "", ItemType::POTION, enemyWarehhouse, 1, 1);
+    Item* potion2 = new Item("Potion", "Healing potion.", "Potion that heals 75hp", ItemType::POTION, enemyWarehhouse, 1, 1);
     Item* tusk = new Item("Tusk", "The tusk of a huge animal.", "", ItemType::STANDARD, enemyWarehhouse, 1, 1);
     entities.push_back(potion2);
     entities.push_back(tusk);
 
-    NPC* enemyLibrary = new NPC("Zombie", "A live zombie!!!.", "", library, 9);
+    NPC* enemyLibrary = new NPC("Zombie", "A live zombie!!!.", "Go back to Plants vs Zombies!", library, 9);
     entities.push_back(enemyLibrary);
 
     Item* awesomeSword = new Item("Timais", "An awesome sword, looks powerful...", "", ItemType::WEAPON, enemyLibrary, 60, 5);
     entities.push_back(awesomeSword);
 
-    NPC* enemyDungeon = new NPC("Vampire", "Now a vampire...what's wrong with this castle?", "", dungeon, 9);
+    NPC* enemyDungeon = new NPC("Vampire", "Now a vampire...what's wrong with this castle?", "His name's Edward.", dungeon, 9);
     entities.push_back(enemyDungeon);
 
     Item* awesomeArmor = new Item("Demoleon", "The definitive armor.", "", ItemType::ARMOR, enemyDungeon, 90, 5);
     entities.push_back(awesomeArmor);
 
-    finalBoss = new NPC("Demon", "The last stage of this infernal castle...", "", secret_room, 30);
+    finalBoss = new NPC("Demon", "The last stage of this infernal castle...", "He is Level 30, you better be prepared.", secret_room, 30);
     entities.push_back(finalBoss);
 
     Item* water = new Item("Water", "A water leak breaks the silence of the room.", "Water drops fall from a leak on the ceiling of the room and creates a puddle on the floor.", ItemType::NOT_PICKABLE, hall, 1, 1);
@@ -75,7 +79,7 @@ World::World() {
     entities.push_back(rocks);
 
     Box* box = new Box("Chest", "Small chest.", "A small chest, looks like a pirate one.", warehouse);
-    Item* greyKey = new Item("Grey Key", "An old grey key.", "An old grey key.", ItemType::KEY, box, 1, 1);
+    Item* greyKey = new Item("Key", "An old key.", "An old key.", ItemType::KEY, box, 1, 1);
     entities.push_back(box);
     entities.push_back(greyKey);
 
@@ -110,7 +114,6 @@ World::World() {
     warehouse->SetExit(e9);
     entities.push_back(e8);
     entities.push_back(e9);
-
     player->Look();
     std::cout << "\n";
 
@@ -126,7 +129,7 @@ World::~World() {
 
 Game_States World::Update(vector<string>& instructions) {
     Game_States ret = Game_States::CONTINUE;
-
+    
     if (instructions.size() > 0 && instructions[0].length() > 0) {
         ret = ParseInstructions(instructions);
     }
@@ -135,6 +138,9 @@ Game_States World::Update(vector<string>& instructions) {
 
     if (player->IsAlive() == false) {
         ret = Game_States::DEAD;
+    }
+    if (finalBoss->IsAlive() == false) {
+        ret = Game_States::WIN;
     }
     return ret;
 }
@@ -148,7 +154,9 @@ void World::GameLoop() {
         }
         for (size_t i = 0; i < entities.size();) {
             if (entities[i]->to_destroy) {
+
                 entities[i]->DropItems();
+                entities[i]->ChangeParent(nullptr);
                 delete entities[i];
                 entities.erase(entities.begin() + i);
             } else {

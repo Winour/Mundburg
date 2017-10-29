@@ -3,11 +3,9 @@
 
 #include <string>
 #include <vector>
-
+#include <iostream>
 #include "Entity.h"
 
-#include <iostream>
-using namespace std;
 
 class Exit;
 

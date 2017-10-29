@@ -1,6 +1,8 @@
 #include "GlobalFunctions.h"
 #include <iostream>
 
+
+
 void EnterInstructions(std::vector<std::string>& instructions, const std::string player_input) {
 
     const char* ptr = player_input.c_str();

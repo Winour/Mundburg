@@ -1,15 +1,4 @@
-﻿  main.cpp
-  World.cpp
-  Room.cpp
-  Player.cpp
-  NPC.cpp
-  Item.cpp
-  GlobalFunctions.cpp
-  Exit.cpp
-  Entity.cpp
-  Creature.cpp
-  Box.cpp
-  Generating Code...
+﻿  World.cpp
   LINK : C:\Users\usuario\Desktop\Mundburg\Debug\Mundburg.exe not found or not built by the last incremental link; performing full link
   Mundburg.vcxproj -> C:\Users\usuario\Desktop\Mundburg\Debug\Mundburg.exe
   Mundburg.vcxproj -> C:\Users\usuario\Desktop\Mundburg\Debug\Mundburg.pdb (Partial PDB)

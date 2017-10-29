@@ -4,8 +4,9 @@
 #include "Room.h"
 #include "Item.h"
 #include "GlobalFunctions.h"
+#include <iostream>
 
-
+using namespace std;
 
 Player::Player(const char* name, const char* description, const char* long_description, Room* room):
     Creature(name, description, long_description, room, 5, EntityType::PLAYER)
@@ -92,7 +93,7 @@ bool Player::Open(vector<string>& instructions) {
 }
 
 void Player::Look() const {
-    GetRoom()->Look();
+    GetRoom()->Look(long_descriptions,true);
 }
 
 void Player::Examine(vector<string>& instructions) const {

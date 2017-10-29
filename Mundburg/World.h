@@ -7,8 +7,6 @@
 
 #include "GlobalFunctions.h"
 
-#include <iostream>
-using namespace std;
 
 class Entity;
 class Creature;
@@ -20,15 +18,15 @@ public:
     World();
     ~World();
 
-    Game_States Update(vector<string>& instructions);
-    Game_States ParseInstructions(vector<string>& instructions);
+    Game_States Update(std::vector<std::string>& instructions);
+    Game_States ParseInstructions(std::vector<std::string>& instructions);
     void GameLoop();
 
 
 private:
     Player* player;
     NPC* finalBoss;
-    vector<Entity*> entities;
+    std::vector<Entity*> entities;
     clock_t tick_timer;
 };
 

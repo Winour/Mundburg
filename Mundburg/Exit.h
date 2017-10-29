@@ -6,9 +6,6 @@
 
 #include "Entity.h"
 
-#include <iostream>
-using namespace std;
-
 class Room;
 class Item;
 
