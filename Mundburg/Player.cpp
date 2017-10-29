@@ -118,8 +118,27 @@ void Player::Examine(vector<string>& instructions) const {
         case 2: {
             std::vector<Entity*> temp = GetRoom()->GetChilds();
             for (size_t i = 0; i < temp.size(); i++) {
+
                 if (Compare(instructions[1], temp[i]->GetName())) {
                     std::cout << temp[i]->GetLongDescription() << std::endl;
+
+                    if (temp[i]->GetType() == EntityType::ITEM) {
+                        if (((Item*)temp[i])->item_type == ItemType::BOX) {
+
+                            if (((Box*)temp[i])->IsOpen()) {
+
+                                if (temp[i]->GetChilds().size() < 1) {
+                                    std::cout << "Empty.\n";
+                                }
+                                for (size_t j = 0; j < temp[i]->GetChilds().size(); i++) {
+                                    std::cout << temp[i]->GetChilds()[j]->GetName() << ": " << temp[i]->GetChilds()[j]->GetLongDescription() << std::endl;
+                                }
+
+                            } else {
+                                std::cout << "It's closed.\n";
+                            }
+                        }
+                    }
                     return;
                 }
             }
@@ -279,7 +298,7 @@ void Player::Take(vector<string>& instructions, bool offset) {
                     return;
                 } else {
                     items[i]->ChangeParent(this);
-                    std::cout << "You took " << items[i]->GetName() << std::endl;
+                    std::cout << "You took " << items[i]->GetName() << ".\n";
                     return;
                 }
             }
@@ -303,7 +322,7 @@ void Player::Take(vector<string>& instructions, bool offset) {
                     return;
                 } else {
                     items[i]->ChangeParent(this);
-                    std::cout << "You took " << items[i]->GetName() << std::endl;
+                    std::cout << "You took " << items[i]->GetName() << ".\n";
                     return;
                 }
             }
@@ -334,7 +353,7 @@ void Player::Take(vector<string>& instructions, bool offset) {
                     return;
                 } else {
                     items[i]->ChangeParent(this);
-                    std::cout << "You took " << items[i]->GetName() << std::endl;
+                    std::cout << "You took " << items[i]->GetName() << ".\n";
                     return;
                 }
             }
@@ -385,7 +404,6 @@ void Player::Unlock(vector<string>& instructions) {
 }
 
 void Player::Lock(vector<string>& instructions) {
-
     switch (instructions.size()) {
     case 3:
         std::cout << "With what?\n";
@@ -421,4 +439,70 @@ void Player::Lock(vector<string>& instructions) {
         break;
     }
 
+}
+
+void Player::Throw(vector<string>& instructions) {
+
+    vector<Entity*> inv = GetChilds();
+
+    switch (instructions.size()) {
+    case 2:
+        for (size_t i = 0; i < inv.size(); i++) {
+            if (Compare(instructions[1], inv[i]->GetName())) {
+                if (((Item*)inv[i])->item_type == ItemType::ARMOR) {
+                    if (inv[i] == GetArmor()) {
+                        std::cout << "You have it equipped.\n";
+                    } else {
+                        std::cout << "You threw " << inv[i]->GetName() << ".\n";
+                        inv[i]->ChangeParent(GetRoom());
+                    }
+                    return;
+                } else if (((Item*)inv[i])->item_type == ItemType::WEAPON) {
+                    if (inv[i] == GetWeapon()) {
+                        std::cout << "You have it equipped.\n";
+                    } else {
+                        std::cout << "You threw " << inv[i]->GetName() << ".\n";
+                        inv[i]->ChangeParent(GetRoom());
+                    }
+                    return;
+                } else {
+                    std::cout << "You threw " << inv[i]->GetName() << ".\n";
+                    inv[i]->ChangeParent(GetRoom());
+                    return;
+                }
+            }
+        }
+        std::cout << "You don't have that item.\n";
+        break;
+    case 3:
+        for (size_t i = 0; i < inv.size(); i++) {
+            if (Compare(instructions[1] + " " + instructions[2], inv[i]->GetName())) {
+                if (((Item*)inv[i])->item_type == ItemType::ARMOR) {
+                    if (inv[i] == GetArmor()) {
+                        std::cout << "You have it equipped.\n";
+                    } else {
+                        std::cout << "You threw " << inv[i]->GetName() << ".\n";
+                        inv[i]->ChangeParent(GetRoom());
+                    }
+                    return;
+                } else if (((Item*)inv[i])->item_type == ItemType::WEAPON) {
+                    if (inv[i] == GetWeapon()) {
+                        std::cout << "You have it equipped.\n";
+                    } else {
+                        std::cout << "You threw " << inv[i]->GetName() << ".\n";
+                        inv[i]->ChangeParent(GetRoom());
+                    }
+                    return;
+                } else {
+                    std::cout << "You threw " << inv[i]->GetName() << ".\n";
+                    inv[i]->ChangeParent(GetRoom());
+                    return;
+                }
+            }
+        }
+        std::cout << "You don't have that item.\n";
+        break;
+    default:
+        break;
+    }
 }

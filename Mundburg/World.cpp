@@ -37,7 +37,7 @@ World::World() {
     Item* ironKey = new Item("Iron Key", "A shiny iron key.", "", ItemType::KEY, hall, 1, 1);
     Item* woodKey = new Item("Wooden Key", "An old wooden key.", "", ItemType::KEY, hall, 1, 1);
     Box* box = new Box("Box", "A box", "", hall);
-    Item* asd = new Item("asd", "", "", ItemType::STANDARD, box, 1, 1);
+    Item* asd = new Item("asd", "Beutyful box item", "Beutyful box item", ItemType::STANDARD, box, 1, 1);
 
     Exit* e1 = new Exit("Iron door", "It has nothing special", "", hall, stairs, "north", ironKey, false, false);
     Exit* e2 = new Exit("Grey door", "It looks like a normal door.", "", hall, dungeon, "east", nullptr, true, false);
@@ -156,10 +156,6 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
 
                 player->Inventory();
 
-            } else if (Compare(instructions[0], "heal")) {
-
-                player->Look();//TODO
-
             } else if (Compare(instructions[0], "equipment")) {
 
                 player->Equipment();
@@ -234,9 +230,9 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
 
                 player->Unequip(instructions);
 
-            } else if (Compare(instructions[0], "throw") || Compare(instructions[0], "drop")) { //DOING 2
+            } else if (Compare(instructions[0], "throw") || Compare(instructions[0], "drop")) {
 
-                player->Go(instructions);//TODO
+                player->Throw(instructions);
 
             } else if (Compare(instructions[0], "attack")) {
 
@@ -297,6 +293,10 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
 
                 player->Unlock(instructions);
 
+            } else if (Compare(instructions[0], "throw") || Compare(instructions[0], "drop")) {
+
+                player->Throw(instructions);
+
             } else if (Compare(instructions[0], "examine")) {
 
                 player->Examine(instructions);
@@ -314,7 +314,7 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
 
             } else if (Compare(instructions[0], "take") && Compare(instructions[2], "from")) {
 
-                player->Take(instructions); //AAAAAAAAAAAAAAAAAAAAAAAAAA
+                player->Take(instructions);
 
             } else {
 

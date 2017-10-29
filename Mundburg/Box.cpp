@@ -11,6 +11,10 @@ Item(name, description, long_description, ItemType::BOX, parent, 0, 0), _open(fa
 Box::~Box() {
 }
 
+bool Box::IsOpen() const {
+    return _open;
+}
+
 void Box::Open() {
     if (_open == false) {
         _open = true;

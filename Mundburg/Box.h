@@ -9,6 +9,7 @@ public:
     Box(const char* name, const char* description, const char* long_description, Entity* parent);
     ~Box();
 
+    bool IsOpen() const;
     void Open();
     void Close();
     bool TakeItem(const char* item, Entity* new_parent);

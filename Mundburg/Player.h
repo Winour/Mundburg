@@ -25,6 +25,7 @@ public:
     void Take(vector<string>& instructions, bool offset = false);
     void Unlock(vector<string>& instructions);
     void Lock(vector<string>& instructions);
+    void Throw(vector<string>& instructions);
 
 public:
     int long_descriptions = 0;                      // 0 = Normal Description, 1 = Short Description, 2 = Long Description
