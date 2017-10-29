@@ -10,10 +10,11 @@
 using namespace std;
 
 class Room;
+class Item;
 
 class Exit : public Entity{
 public:
-    Exit(const char* name, const char* description, const char* long_description, Room* room, Room* destination, std::string direction, Entity* key, bool closed, bool locked);
+    Exit(const char* name, const char* description, const char* long_description, Room* room, Room* destination, std::string direction, Item* key, bool closed, bool locked);
     ~Exit();
 
     //Getters
@@ -21,20 +22,21 @@ public:
     Room* GetDestination() const;
     bool IsClosed() const;
     bool IsLocked() const;
+    Item* GetKey() const;
 
     //Setters
     void Open();
     void Close();
-    void Lock(Entity* key);
-    void Unlock(Entity* key);
+    bool Lock(Entity* key);
+    bool Unlock(Entity* key);
 
-private:
+private:    //ALL OK
     
     bool _closed;
     bool _locked;
     std::string _direction;
     Room* _destination;
-    Entity* _key;
+    Item* _key;
 
 };
 

@@ -1,6 +1,7 @@
 #include "World.h"
 #include "Entity.h"
 #include "Item.h"
+#include "Box.h"
 #include "Room.h"
 #include "Exit.h"
 #include "Creature.h"
@@ -25,18 +26,21 @@ World::World() {
 
     player = new Player("Lancelot", "Handsome heroe", "", hall);
 
-    Item* a = new Item("Rock", "It's a rock", "", Item_type::STANDARD, player, 1, 10);
-    Item* b = new Item("Key", "It's a rock", "", Item_type::KEY, player, 1, 10);
-    Item* c = new Item("Malla", "It's a rock", "", Item_type::ARMOR, player, 1, 10);
-    Item* d = new Item("Espada", "It's a rock", "", Item_type::WEAPON, player, 1, 10);
-    Item* e = new Item("Rock", "It's a rock", "", Item_type::CONTAINER, player, 1, 10);
-    Item* g = new Item("Water", "It's a rock", "", Item_type::FLUID, e, 1, 10);
-    Item* water = new Item("Water", "A water leak breaks the silence of the room.", "", Item_type::FLUID, hall, 1, 1);
-    Item* rocks = new Item("Rocks", "A huge pile of rocks blocks the 4th door behind you.", "", Item_type::NOT_PICKABLE, hall, 1, 1);
+    Item* a = new Item("Rock", "It's a rock", "", ItemType::STANDARD, player, 1, 10);
+    Item* b = new Item("Key", "It's a rock", "", ItemType::KEY, player, 1, 10);
+    Item* c = new Item("Malla", "It's a rock", "", ItemType::ARMOR, player, 1, 10);
+    Item* d = new Item("Espada", "It's a rock", "", ItemType::WEAPON, player, 1, 10);
+    Item* e = new Item("Rock", "It's a rock", "", ItemType::CONTAINER, player, 1, 10);
+    Item* g = new Item("Water", "It's a rock", "", ItemType::FLUID, e, 1, 10);
+    Item* water = new Item("Water", "A water leak breaks the silence of the room.", "Water drops fall from a leak on the ceiling of the room and creates a puddle on the floor.", ItemType::FLUID, hall, 1, 1);
+    Item* rocks = new Item("Rocks", "A huge pile of rocks blocks the 4th door behind you.", "", ItemType::NOT_PICKABLE, hall, 1, 1);
+    Item* ironKey = new Item("Iron Key", "A shiny iron key.", "", ItemType::KEY, hall, 1, 1);
+    Item* woodKey = new Item("Wooden Key", "An old wooden key.", "", ItemType::KEY, hall, 1, 1);
+    Box* box = new Box("Box", "A box", "", hall);
 
-    Exit* e1 = new Exit("Iron door", "It has nothing special", "", hall, stairs, "north", nullptr, true, false);
+    Exit* e1 = new Exit("Iron door", "It has nothing special", "", hall, stairs, "north", ironKey, false, false);
     Exit* e2 = new Exit("Grey door", "It looks like a normal door.", "", hall, dungeon, "east", nullptr, true, false);
-    Exit* e3 = new Exit("Wooden door", "It looks like a normal wooden door.", "", hall, warehouse, "west", nullptr, true, false);
+    Exit* e3 = new Exit("Wooden door", "It looks like a normal wooden door.", "", hall, warehouse, "west", woodKey, true, true);
     hall->SetExit(e1);
     hall->SetExit(e2);
 	hall->SetExit(e3);
@@ -123,29 +127,29 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
 
             } else if (Compare(instructions[0], "superbrief")) {
 
-                std::cout << "Superbrief mode: now you won't get rooms description,\neven if you haven't been there before.\nUnless you use 'Look'.";
-                long_descriptions = 1;
+                std::cout << "Superbrief mode: now you won't get rooms description,\neven if you haven't been there before.\nUnless you use 'Look'.\n";
+                player->long_descriptions = 1;
 
             } else if (Compare(instructions[0], "brief")) {
 
-                std::cout << "Brief mode: now you will only get rooms description\nif you haven't been there before or you use 'look'";
-                long_descriptions = 0;
+                std::cout << "Brief mode: now you will only get rooms description\nif you haven't been there before or you use 'Look'.\n";
+                player->long_descriptions = 0;
 
             } else if (Compare(instructions[0], "long")) {
 
-                std::cout << "Long mode: now you will always get rooms description";
-                long_descriptions = 2;
+                std::cout << "Long mode: now you will always get rooms description.\n";
+                player->long_descriptions = 2;
 
             } else if (Compare(instructions[0], "suicide")) {
                 std::cout << "You realise that this is the end and there's nothing you can do...\n";
                 std::cout << "You slowly take a pill from your pocket...Cyanide...\n"; 
                 std::cout << "While the pill enters on your mouth,\nall you can think is if you are going to get a good grade on programming.\n";
-                player->ReciveDmg(50000);
+                player->hp = 0;
                 ret = Game_States::DEAD;
 
-            } else if (Compare(instructions[0], "examine")) {
+            } else if (Compare(instructions[0], "examine") || Compare(instructions[0], "stats")) {
 
-                player->Look();         // TODO
+                player->Examine(instructions);
 
             } else if (Compare(instructions[0], "inventory") || Compare(instructions[0], "i")) {
 
@@ -157,11 +161,11 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
 
             } else if (Compare(instructions[0], "equipment")) {
 
-                player->Equipment();//TODO
+                player->Equipment();
 
             } else if (Compare(instructions[0], "exits")) {
 
-                player->GetRoom()->GetExits();
+                player->GetRoom()->PrintExits();
 
             } else if (Compare(instructions[0], "instructions") || Compare(instructions[0], "help")) {
 
@@ -215,11 +219,11 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
 
             } else if (Compare(instructions[0], "take")) {
 
-                player->Go(instructions);//TODO
+                player->Take(instructions);
 
             } else if (Compare(instructions[0], "examine")) {
 
-                player->Go(instructions);//TODO
+                player->Examine(instructions);
 
             } else if (Compare(instructions[0], "equip")) {
 
@@ -227,9 +231,9 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
 
             } else if (Compare(instructions[0], "unequip")) {
 
-                player->Go(instructions);//TODO
+                player->Unequip(instructions);
 
-            } else if (Compare(instructions[0], "throw") || Compare(instructions[0], "drop")) {
+            } else if (Compare(instructions[0], "throw") || Compare(instructions[0], "drop")) { //DOING 2
 
                 player->Go(instructions);//TODO
 
@@ -241,25 +245,21 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
 
                 player->Look();         // TODO
 
-            } else if (Compare(instructions[0], "examine")) {
-
-                player->Look();         // TODO
-
             } else if (Compare(instructions[0], "read")) {
 
                 player->Look();//TODO
 
-            } else if (Compare(instructions[0], "use")) {
+            } else if (Compare(instructions[0], "use")) {   //POTIONS
 
                 player->Look();//TODO
 
-            } else if (Compare(instructions[0], "open")) {
+            } else if (Compare(instructions[0], "open")) {      // DOING 
 
                 player->Look();//TODO
 
             } else {
 
-                //ret = false;
+                ret = Game_States::REPEAT_INSTRUCTION;
 
             }
             break;
@@ -270,7 +270,7 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
 
             } else if (Compare(instructions[0], "pick") && Compare(instructions[1], "up")) {
 
-                player->Go(instructions); //TODO
+                player->Take(instructions, true);
 
             }else if (Compare(instructions[0], "open")) {
 
@@ -280,34 +280,71 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
 
                 player->Close(instructions);
 
+            } else if (Compare(instructions[0], "take")) {
+
+                player->Take(instructions);
+
+            } else if (Compare(instructions[0], "unlock")) {
+
+                player->Unlock(instructions);
+
+            } else if (Compare(instructions[0], "lock")) {
+
+                player->Unlock(instructions);
+
+            } else if (Compare(instructions[0], "examine")) {
+
+                player->Examine(instructions);
+
             } else {
 
-                //ret = false;
+                ret = Game_States::REPEAT_INSTRUCTION;
 
             }
             break;
         case 4:
-            if (Compare(instructions[0], "lock")) {
-                
-                player->Look();//TODO
+            if (Compare(instructions[0], "throw")) {
 
-            } else if (Compare(instructions[0], "unlock")) {
-
-                player->Go(instructions);//TODO
-
-            } else if (Compare(instructions[0], "throw")) {
-
-                instructions.push_back("east");
-                player->Go(instructions);
+                player->Go(instructions);   //TODO
 
             } else {
 
-                //ret = false;
+                ret = Game_States::REPEAT_INSTRUCTION;
+
+            }
+            break;
+        case 5:
+            if (Compare(instructions[0], "unlock")) {
+
+                player->Unlock(instructions);
+
+            } else if (Compare(instructions[0], "lock")) {
+
+                player->Lock(instructions);
+
+            } else if (Compare(instructions[0], "throw")) {
+
+                player->Lock(instructions);//TODO
+
+            } else {
+
+                ret = Game_States::REPEAT_INSTRUCTION;
+
+            }
+            break;
+        case 6:
+            if (Compare(instructions[0], "unlock")) {
+
+                player->Unlock(instructions);
+
+            } else if (Compare(instructions[0], "lock")) {
+
+                player->Lock(instructions);
 
             }
             break;
         default:
-            // = false;
+            ret = Game_States::REPEAT_INSTRUCTION;
             break;
     }
     return ret;

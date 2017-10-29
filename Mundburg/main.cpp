@@ -9,12 +9,9 @@
 
 using namespace std;
 
-int long_descriptions;
 
 
-
-int main() {
-    long_descriptions = 0;                              // 0 = Normal Description, 1 = Short Description, 2 = Long Description
+int main() {                           
 
 	char key;
     bool game_over = false;

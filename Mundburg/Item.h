@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-enum class Item_type {
+enum class ItemType {
     NOT_PICKABLE,
     POTION,
     KEY,
@@ -13,22 +13,25 @@ enum class Item_type {
     WEAPON,
     CONTAINER,
     FLUID,
-    STANDARD
+    STANDARD,
+    BOX
 };
 
 class Item : public Entity{
 public:
 
-    Item(const char* name, const char* description, const char* long_description, Item_type type, Entity* parent, int value, int weight);
+    Item(const char* name, const char* description, const char* long_description, ItemType type, Entity* parent, int value, int weight);
     ~Item();
 
     int GetValue() const;
     int GetWeight() const;
-    Item_type GetItemType() const;
+    const ItemType item_type;
 
-    int _value;
-    int _weight;
-    Item_type _type;
+private:
+
+    const int _value;
+    const int _weight;
+
 
 };
 

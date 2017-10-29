@@ -17,9 +17,17 @@ public:
 	bool Open(vector<string>& instructions);
     bool Close(vector<string>& instructions);
     void Look() const;
+    void Examine(vector<string>& instructions) const;
     void Inventory()const;
     void Equipment() const;
     void Equip(vector<string>& instructions);
+    void Unequip(vector<string>& instructions);
+    void Take(vector<string>& instructions, bool offset = false);
+    void Unlock(vector<string>& instructions);
+    void Lock(vector<string>& instructions);
+
+public:
+    int long_descriptions = 0;                      // 0 = Normal Description, 1 = Short Description, 2 = Long Description
 
 };
 

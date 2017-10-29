@@ -26,8 +26,8 @@ public:
 
     void RemoveChild(Entity* child);
     void ChangeParent(Entity* new_parent);
-    bool Find(const Entity* entity) const;
-    Entity* Find(const string name, EntityType type) const;
+    bool Find(Entity* entity) const;
+    Entity* Find(string name, EntityType type) const;
     void FindAll(EntityType type, vector<Entity*>& container) const;
 
     // Getters
@@ -55,7 +55,5 @@ private:
     vector<Entity*> _childs;
 
 };
-
-extern int long_descriptions;                                 // 0 = Normal Description, 1 = Short Description, 2 = Long Description
 
 #endif

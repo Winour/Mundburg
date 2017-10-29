@@ -32,7 +32,7 @@ void Entity::ChangeParent(Entity* new_parent) {
     }
 }
 
-bool Entity::Find(const Entity* entity) const {
+bool Entity::Find(Entity* entity) const {
     for (int i = 0; i < _childs.size(); i++) {
         if (_childs[i] == entity) {
             return true;
@@ -41,7 +41,7 @@ bool Entity::Find(const Entity* entity) const {
     return false;
 }
 
-Entity* Entity::Find(const string name, EntityType type) const {
+Entity* Entity::Find(string name, EntityType type) const {
     for (int i = 0; i < _childs.size(); i++) {
         if (_childs[i]->_type == type) {
             if (Compare(_childs[i]->_name, name)) {

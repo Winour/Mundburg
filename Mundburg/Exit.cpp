@@ -1,9 +1,10 @@
 #include "Exit.h"
 #include "Room.h"
+#include "Item.h"
 
 #include <iostream>
 
-Exit::Exit(const char* name, const char* description, const char* long_description, Room* room, Room* destination, std::string direction, Entity* key, bool closed, bool locked) :
+Exit::Exit(const char* name, const char* description, const char* long_description, Room* room, Room* destination, std::string direction, Item* key, bool closed, bool locked) :
 Entity(name, description,long_description, room, EntityType::EXIT), _destination(destination), _direction(direction), _key(key), _closed(closed), _locked(locked)
 {
 
@@ -30,9 +31,13 @@ bool Exit::IsLocked() const {
     return _locked;
 }
 
+Item* Exit::GetKey() const {
+    return _key;
+}
+
 void Exit::Open() {
     if (_locked) {
-        std::cout << "The " << GetName() << " is locked, you need a " << _key->GetName() << " in order to open it.\n";
+        std::cout << "The " << GetName() << " is locked, you need the " << _key->GetName() << " in order to open it.\n";
     } else if (!_closed) {
         std::cout << "The " << GetName() << " is already open.\n";
     } else {
@@ -50,27 +55,41 @@ void Exit::Close() {
     }
 }
 
-void Exit::Lock(Entity* key) {
+bool Exit::Lock(Entity* key) {
     if (_key == nullptr) {
-        std::cout << "\nThere's no lock\n";  
+        std::cout << "\nThere's no lock\n";
+        return false;
+    } else if (nullptr == key) {
+        std::cout << "\nYou don't have that key.\n";
+        return false;
     } else if (_key != key) {
         std::cout << "\nThe " << key->GetName() << " doesn't fit into the lock.\n";
+        return false;
     } else if (_locked) {
         std::cout << "\nThe " << GetName() << " it's already locked.\n";
+        return false;
     } else {
         _locked = true;
+        return true;
     }
 }
 
-void Exit::Unlock(Entity* key) {
+bool Exit::Unlock(Entity* key) {
     if (_key == nullptr) {
         std::cout << "\nThere's no lock\n";
+        return false;
+    } else if (nullptr == key) {
+        std::cout << "\nYou don't have that key.\n";
+        return false;
     } else if (_key != key) {
         std::cout << "\nThe " << key->GetName() << " doesn't fit into the lock.\n";
+        return false;
     } else if (!_locked) {
         std::cout << "\nThe " << GetName() << " it's already unlocked.\n";
+        return false;
     } else {
         _locked = false;
+        return true;
     }
 }
 

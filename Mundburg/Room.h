@@ -18,11 +18,12 @@ public:
     ~Room();
 
     void SetExit(Exit* exit);
-    Exit* GetExit(const string direction) const;
-    void GetExits() const;
+    Exit* GetExit(const string& direction) const;
+    void PrintExits() const;
 
-    void Look(bool full_description = false);
+    void Look(int long_descriptions = 0, bool full_description = false);
     vector<Exit*> exits;
+
 
 private:
     bool _visited;
