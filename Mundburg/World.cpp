@@ -29,7 +29,7 @@ World::World() {
 
     player = new Player("Lancelot", "Handsome heroe", "", hall);
     entities.push_back(player);
-    NPC* npc = new NPC("Enemy", "Ugly enemy", "", hall, 2);
+    NPC* npc = new NPC("Enemy", "Ugly enemy", "", hall, 1);
     entities.push_back(npc);
     Item* a = new Item("Rock", "It's a rock", "", ItemType::STANDARD, player, 1, 10);
     Item* b = new Item("Key", "It's a rock", "", ItemType::KEY, player, 1, 10);
@@ -39,7 +39,7 @@ World::World() {
     Item* g = new Item("Water", "It's a rock", "", ItemType::FLUID, e, 1, 10);
     Item* water = new Item("Water", "A water leak breaks the silence of the room.", "Water drops fall from a leak on the ceiling of the room and creates a puddle on the floor.", ItemType::FLUID, hall, 1, 1);
     Item* rocks = new Item("Rocks", "A huge pile of rocks blocks the 4th door behind you.", "", ItemType::NOT_PICKABLE, hall, 1, 1);
-    Item* ironKey = new Item("Iron Key", "A shiny iron key.", "", ItemType::KEY, hall, 1, 1);
+    Item* ironKey = new Item("Iron Key", "A shiny iron key.", "", ItemType::KEY, npc, 1, 1);
     Item* woodKey = new Item("Wooden Key", "An old wooden key.", "", ItemType::KEY, hall, 1, 1);
     Box* box = new Box("Box", "A box", "", hall);
     Item* asd = new Item("asd", "Beutyful box item", "Beutyful box item", ItemType::STANDARD, box, 1, 1);
@@ -104,12 +104,13 @@ void World::GameLoop() {
         for (size_t i = 0; i < entities.size(); i++) {
             entities[i]->Update();
         }
-        for (size_t i = 0; i < entities.size(); i++) {
+        for (size_t i = 0; i < entities.size();) {
             if (entities[i]->to_destroy) {
-                cout << entities.size() << endl;
+                entities[i]->DropItems();
                 delete entities[i];
                 entities.erase(entities.begin() + i);
-                cout << entities.size() << endl;
+            } else {
+                ++i;
             }
         }
         tick_timer = now;
@@ -268,10 +269,6 @@ Game_States World::ParseInstructions(vector<string>& instructions) {
             } else if (Compare(instructions[0], "attack")) {
 
                 player->Attack(instructions);
-
-            } else if (Compare(instructions[0], "loot")) {
-
-                player->Look();         // TODO
 
             } else if (Compare(instructions[0], "use")) {   //POTIONS
 

@@ -119,15 +119,12 @@ void Creature::Update() {
     if (IsAlive()) {
         if (target != nullptr) {
             if (GetRoom()->Find(target)) {
-                std::cout << "Attack\n";
                 Attack(target);
                 return;
             } else {
-                std::cout << "bye target\n";
                 target = nullptr;
                 return;
             }
         }
-        std::cout << "NO Attack";
     }
 }

@@ -31,6 +31,7 @@ public:
     void LevelUp();
     void SetTarget(Entity* objective);
     void Update() override;
+    void DropItems();
 
 public:
     bool poisoned;

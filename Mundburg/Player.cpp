@@ -341,7 +341,7 @@ void Player::Take(vector<string>& instructions, bool offset) {
                 } else if (ItemType::NOT_PICKABLE == ((Item*)items[i])->item_type) {
                     std::cout << "You can't take that.\n";
                     return;
-                }if (ItemType::BOX == ((Item*)items[i])->item_type) {
+                }else if (ItemType::BOX == ((Item*)items[i])->item_type) {
                     if (((Box*)items[i])->TakeItem(instructions[1].c_str(), this)) {
                         std::cout << "You took " << instructions[1] << " from " << items[i]->GetName() << std::endl;
                     } else {

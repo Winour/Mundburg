@@ -31,6 +31,7 @@ public:
     Entity* Find(string name, EntityType type) const;
     void FindAll(EntityType type, vector<Entity*>& container) const;
     virtual void Update() {};
+    void DropItems();
 
     // Getters
     std::string GetName() const;

@@ -33,7 +33,7 @@ void Entity::ChangeParent(Entity* new_parent) {
 }
 
 bool Entity::Find(Entity* entity) const {
-    for (int i = 0; i < _childs.size(); i++) {
+    for (size_t i = 0; i < _childs.size(); i++) {
         if (_childs[i] == entity) {
             return true;
         }
@@ -42,7 +42,7 @@ bool Entity::Find(Entity* entity) const {
 }
 
 Entity* Entity::Find(string name, EntityType type) const {
-    for (int i = 0; i < _childs.size(); i++) {
+    for (size_t i = 0; i < _childs.size(); i++) {
         if (_childs[i]->_type == type) {
             if (Compare(_childs[i]->_name, name)) {
                 return _childs[i];
@@ -52,7 +52,7 @@ Entity* Entity::Find(string name, EntityType type) const {
     return nullptr;
 }
 void Entity::FindAll(EntityType type, vector<Entity*>& container) const {
-    for (int i = 0; i < _childs.size(); i++) {
+    for (size_t i = 0; i < _childs.size(); i++) {
         if (_childs[i]->_type == type) {
             container.push_back(_childs[i]);
         }
@@ -85,7 +85,7 @@ std::string Entity::GetLongDescription() const {
 
 void Entity::SetChild(Entity* child) {
 
-    for (int i = 0; i < _childs.size(); i++) {                  // Looks for child duplication
+    for (size_t i = 0; i < _childs.size(); i++) {                  // Looks for child duplication
         if (child == _childs[i]) {
             return;
         }
@@ -108,4 +108,12 @@ void Entity::SetDescription(std::string& new_description) {
 
 void Entity::SetLongDescription(std::string& new_long_description) {
     _long_description = new_long_description;
+}
+
+
+void Entity::DropItems() {
+    for (size_t i = 0; i < GetChilds().size(); i++) {
+        std::cout << GetName() << " dropped a " << GetChilds()[i]->GetName() << "!\n";
+        GetChilds()[i]->ChangeParent(_parent);
+    }
 }
